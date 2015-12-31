@@ -27,7 +27,7 @@ div#logo{
   position: relative;
   top:12%;
   left:2.5%;
-  background-image:url('./logo/logo.png');
+  background-image:url('../logo/logo.png');
   background-repeat: no-repeat;
   background-size: 20% 95%;
 }
@@ -35,9 +35,6 @@ div#logo{
 div#menu{
   float:right;
   width:59%;
-  background-color:pink;
-
-
 }
 
 div#submenucabecera2{
@@ -117,9 +114,7 @@ div#submenucabecera2 ul {
 div#submenucabecera2 ul li a:hover:not(.active) {
     color: red;
 }
-div#submenucabecera2 ul li:hover {
-    color: pink;
-}
+
 div#submenucabecera2 li a {
     display: block;
     color: white;
@@ -139,6 +134,9 @@ div#submenu {
   height:100%;
 }
 
+div#submenu  a:hover{
+  color:red;
+}
 
 div#submenucabecera2 .active {
     background-color: #4CAF50;

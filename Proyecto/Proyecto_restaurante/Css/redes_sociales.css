@@ -27,7 +27,7 @@ div#logo{
   position: relative;
   top:12%;
   left:2.5%;
-  background-image:url('./logo/logo.png');
+  background-image:url('../logo/logo.png');
   background-repeat: no-repeat;
   background-size: 20% 95%;
 }
@@ -35,9 +35,6 @@ div#logo{
 div#menu{
   float:right;
   width:59%;
-  background-color:pink;
-
-
 }
 
 
