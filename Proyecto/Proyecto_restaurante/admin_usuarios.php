@@ -181,7 +181,10 @@ session_start();
                                 <td>".$fila->Nombre."</td>
                                 <td>".$fila->Apellidos."</td>
                                 <td>".$fila->Telefono."</td>
-                                <td>".$fila->idusuario."</td>
+                                <td>
+                                  <a href='admin_editar_usuarios.php?idusuario=".$fila->idusuario."'>Editar</a>
+                                  <a href='admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'>Borrar</a>
+                              </td>
                               </tr>";
                     }
               }
