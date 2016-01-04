@@ -14,10 +14,10 @@
     <h3> Bienvienido <?php echo $_SESSION["user"]." ".$_SESSION["tipo"];?> </h3>
     <a href="indexuser.php?logout=yes">Cerrar session</a>
     <?php
-    
+
         if (isset($_GET["logout"])){
                 session_destroy();
-                header("Location: login.php");
+                header("Location: index.php");
         }else{
 
         }
