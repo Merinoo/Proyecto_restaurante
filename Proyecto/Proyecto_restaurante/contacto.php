@@ -9,34 +9,16 @@ session_start();
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./Css/indexhtml.css" rel="stylesheet" type="text/css">
+    <link href="./Css/contacto.css" rel="stylesheet" type="text/css">
     <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
-
-    <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-    <style>
-    .carousel-inner > .item > img,
-    .carousel-inner > .item > a > img {
-        width:1300px;
-        height:740px;
-        margin: auto;
-        margin-top:0px;
-    }
-    </style>
-
   </head>
 
-    <body style="background-image:url('./logo/fondo.jpg')">
+    <body>
 
       <div id='global'>
           <div id='menucabecera'>
 
               <div id="logo">
-
               </div>
 
               <div id="menu">
@@ -144,64 +126,9 @@ session_start();
             ?>
 
 
-      <div id='slidercentral'>
-
-        <div style="width:100%:position:relative;">
-          <br>
-          <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position:relative;top:-21px;">
-
-            <!-- Esto representa el numero de obejetos que va dentro del slider y se ve con los puntos -->
-            <ol class="carousel-indicators">
-              <li data-target="#slider" data-slide-to="0" class="active"></li>
-              <li data-target="#slider" data-slide-to="1"></li>
-              <li data-target="#slider" data-slide-to="2"></li>
-            </ol>
-
-            <!-- Imagenes y texto del slider -->
-            <div class="carousel-inner"  role="listbox">
-              <div class="item active">
-                <img src="./slider/salon1.jpg" alt="Chania" width="460" height="345">
-                 <div class="carousel-caption">
-                   <h3>Salon</h3>
-                   <p>Salon bien iluminado y decorado.</p>
-                 </div>
-              </div>
-
-              <div class="item">
-                <img src="./slider/barra.jpg" alt="Chania" width="460" height="345">
-                <div class="carousel-caption">
-                  <h3>Barra</h3>
-                  <p>Amplia barra de estilo antiguo.</p>
-                </div>
-              </div>
-
-              <div class="item">
-                <img src="./slider/salon2.jpg" alt="Flower" width="460" height="345">
-                <div class="carousel-caption">
-                  <h3>Salon</h3>
-                  <p>Salon al estilo de patio andaluz.</p>
-                </div>
-              </div>
-
-
-            </div>
-
-            <!-- Controles de las flechas izquierda y derecha -->
-
-            <!-- No podemos cambiar la clase izquierda ya que esta definida en bootstrap -->
-            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-              <span class="sr-only">Anterior</span>
-            </a>
-            <!-- No podemos cambiar la clase derecha ya que esta definida en bootstrap -->
-            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-              <span class="sr-only">Siguiente</span>
-            </a>
+          <div id='slidercentral'>
+            slidercentral
           </div>
-        </div>
-
-      </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
