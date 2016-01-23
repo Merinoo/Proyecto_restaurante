@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-
 <?php
 //Crear variable de session
 session_start();
 ?>
-
 <html>
   <head>
     <meta charset="UTF-8">
     <title></title>
     <link href="./Css/indexhtml.css" rel="stylesheet" type="text/css">
-    <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
+      <link href="./Css/login.css" rel="stylesheet" type="text/css">
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -41,11 +39,11 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./menu.php">Menú</a></li>
-                  <li><a href="./redes_sociales.php">Redes sociales</a></li>
-                  <li><a href="./contacto.php">Contacto</a></li>
-                    <ul style="float:right; list-style-type:none;">
-                  <li><a href="./registro.php">Registro</a></li>
+                  <li><a class="active" href="./menu.html">Menú</a></li>
+                  <li><a href="./redes_sociales.html">Redes sociales</a></li>
+                  <li><a href="./contacto.html">Contacto</a></li>
+                    <ul style="float:right;list-style-type:none;">
+                  <li><a href="#about">Acerca de nosotros</a></li>
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
@@ -87,11 +85,10 @@ session_start();
                                </form>
                           </div>
                       </div>
-
                     </ul>
                 </ul>
-              </div> <!-- Cierra <div id="menu"> -->
-            </div> <!-- Cierra <div id='menucabecera'> -->
+              </div>
+            </div>
 
             <?php
               //Recuperar los datos
@@ -145,62 +142,56 @@ session_start();
 
 
       <div id='slidercentral'>
+        <table style="width:400px;margin:0 auto;text-align:center" border="1">
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Tipo</th>
+              <th>DNI</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              <th>Telefono</th>
+              <th>Operaciones</th>
+            </tr>
+        <?php
+        $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+        if ($connection->connect_errno) {
+              printf("Connection failed: %s\n", $connection->connect_error);
+              exit();
+          }
 
-        <div style="width:100%:position:relative;">
-          <br>
-          <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position:relative;top:-21px;">
+        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
+        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
 
-            <!-- Esto representa el numero de obejetos que va dentro del slider y se ve con los puntos -->
-            <ol class="carousel-indicators">
-              <li data-target="#slider" data-slide-to="0" class="active"></li>
-              <li data-target="#slider" data-slide-to="1"></li>
-              <li data-target="#slider" data-slide-to="2"></li>
-            </ol>
+        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
+        $consulta="select * from usuarios";
 
-            <!-- Imagenes y texto del slider -->
-            <div class="carousel-inner"  role="listbox">
-              <div class="item active">
-                <img src="./slider/salon1.jpg" alt="Chania" width="460" height="345">
-                 <div class="carousel-caption">
-                   <h3>Salon</h3>
-                   <p>Salon bien iluminado y decorado.</p>
-                 </div>
-              </div>
+        if ($result = $connection->query($consulta)) {
 
-              <div class="item">
-                <img src="./slider/barra.jpg" alt="Chania" width="460" height="345">
-                <div class="carousel-caption">
-                  <h3>Barra</h3>
-                  <p>Amplia barra de estilo antiguo.</p>
-                </div>
-              </div>
+              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+              if ($result->num_rows==0) {
+                //echo "EL USUARIO NO EXISTE";
+              } else {
+                    while($fila=$result->fetch_object()){
+                        echo "<tr>
+                                <td>".$fila->Username."</td>
+                                <td>".$fila->Email."</td>
+                                <td>".$fila->Tipo."</td>
+                                <td>".$fila->Dni_usuario."</td>
+                                <td>".$fila->Nombre."</td>
+                                <td>".$fila->Apellidos."</td>
+                                <td>".$fila->Telefono."</td>
+                                <td>
+                                  <a href='admin_editar_usuarios.php?idusuario=".$fila->idusuario."'>Editar</a>
+                                  <a href='admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'>Borrar</a>
+                              </td>
+                              </tr>";
+                    }
+              }
+        }
 
-              <div class="item">
-                <img src="./slider/salon2.jpg" alt="Flower" width="460" height="345">
-                <div class="carousel-caption">
-                  <h3>Salon</h3>
-                  <p>Salon al estilo de patio andaluz.</p>
-                </div>
-              </div>
-
-
-            </div>
-
-            <!-- Controles de las flechas izquierda y derecha -->
-
-            <!-- No podemos cambiar la clase izquierda ya que esta definida en bootstrap -->
-            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-              <span class="sr-only">Anterior</span>
-            </a>
-            <!-- No podemos cambiar la clase derecha ya que esta definida en bootstrap -->
-            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-              <span class="sr-only">Siguiente</span>
-            </a>
-          </div>
-        </div>
-
+        ?>
+      </table>
       </div>
 
           <div id='pie'>
