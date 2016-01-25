@@ -45,12 +45,13 @@ session_start();
                   <li><a href="./redes_sociales.php">Redes sociales</a></li>
                   <li><a href="./contacto.php">Contacto</a></li>
                     <ul style="float:right; list-style-type:none;">
-                  <li><a href="./registro.php">Registro</a></li>
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
                       <?php if(empty($_SESSION["user"])) : ?>
+                          <li><a href="./registro.php">Registro</a></li>
                            <li><a href="#login">Login</a></li>
+
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>

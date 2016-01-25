@@ -39,9 +39,10 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./menu.html">Menú</a></li>
-                  <li><a href="./redes_sociales.html">Redes sociales</a></li>
-                  <li><a href="./contacto.html">Contacto</a></li>
+                  <li><a class="active" href="./menu.html">USUARIOS</a></li>
+                  <li><a href="./redes_sociales.html">PRODUCTOS</a></li>
+                  <li><a href="./contacto.html">PEDIDOS</a></li>
+                  <li><a href="./contacto.html">EMPLEADOS</a></li>
                     <ul style="float:right;list-style-type:none;">
                   <li><a href="#about">Acerca de nosotros</a></li>
 
@@ -142,7 +143,8 @@ session_start();
 
 
       <div id='slidercentral'>
-        <table style="width:400px;margin:0 auto;text-align:center" border="1">
+        <div class="col-md-offset-1 col-md-10 " style="margin-top:2%">
+        <table class="table">
             <tr>
               <th>Usuario</th>
               <th>Email</th>
@@ -192,6 +194,7 @@ session_start();
 
         ?>
       </table>
+      </div>
       </div>
 
           <div id='pie'>

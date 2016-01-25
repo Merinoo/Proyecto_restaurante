@@ -150,8 +150,19 @@ session_start();
                 </div>
               </div>
 
-          <div id='slidercentral'>
-            slidercentral
+          <div id='slidercentral' style="padding-left:5%; padding-top:2%">
+            <!-- se cargaran tantos divs como productos haya en la base de datos -->
+            <div style="border:solid red 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
+              <img src="./Imagenes_menu/bebidas.jpg" style="width:70%;height:80%;margin-left:15%">
+              <center><h1 style="margin-top:0px">Producto 01</h1></center>
+            </div>
+
+
+
+
+
+
+
           </div>
 
           <div id='pie'>

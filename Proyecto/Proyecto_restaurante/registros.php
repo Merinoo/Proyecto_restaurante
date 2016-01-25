@@ -14,11 +14,12 @@
 
       <h2>Campos requerido para la conexión</h2>
 
+      <form method="POST" action="registro.php">
       <table border=0>
 
         <tr>
           <td>Usuario:</td>
-          <td><input type="text" name="Usuario" maxlength="25" size="18" placeholder="merino" required></td>
+          <td><input type="text" name="Username" maxlength="25" size="18" placeholder="merino"  required></td>
         </tr>
 
         <tr>
@@ -34,7 +35,7 @@
 
         <tr>
           <td>DNI:</td>
-          <td><input type="text" name="DNI" maxlength="9" size="18" placeholder="53344470H" required></td><br>
+          <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" required></td><br>
         </tr>
 
         <tr>
@@ -49,17 +50,17 @@
 
         <tr>
           <td>Direccion:</td>
-          <td><input type="text" name="Dirección" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" required></td>
+          <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" required></td>
         </tr>
 
         <tr>
           <td>Teléfono:</td>
-          <td><input type="text" name="Teléfono" maxlength="9" size="18" placeholder="679210535" required></td><br>
+          <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" required></td><br>
         </tr>
 
         <tr>
           <td>C.Postal:</td>
-          <td><input type="text" name="C.Postal" maxlength="5" size="18" placeholder="41900" required></td>
+          <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" required></td>
         </tr>
 
         <tr>
@@ -69,12 +70,12 @@
 
         <tr>
           <td>F.Nacimiento:</td>
-          <td><input type="date" name="F.Nacimiento" size="18" placeholder="1990-12-27" ></td>
+          <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" ></td>
         </tr>
 
         <tr>
           <td>Email:</td>
-          <td><input type="text" name="email" maxlength="35" size="18" placeholder="amerino96@gmail.com" required></td>
+          <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com" required></td>
         </tr>
 
         <tr>
@@ -82,11 +83,13 @@
         </tr>
 
       </table>
+      </form>
     </center>
 
     <?php else: ?>
 
     <?php
+
     $Usuario=$_POST["Username"];
     $Password=$_POST["Password"];
 
@@ -95,10 +98,37 @@
     $Apellidos=$_POST["Apellidos"];
     $Direccion=$_POST["Direccion"];
     $Telefono=$_POST["Telefono"];
-    $C.Postal=$_POST["C.postal"];
+    $CPostal=$_POST["CPostal"];
     $Sexo=$_POST["Sexo"];
-    $F.Nacimiento=$_POST["F.Nacimiento"];
+    $FNacimiento=$_POST["FNacimiento"];
     $Email=$_POST["Email"];
+    //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
+
+    //Conexion con la base de datos
+    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+    if ($connection->connect_errno) {
+          printf("Connection failed: %s\n", $connection->connect_error);
+          exit();
+      }
+
+    $consulta="SELECT * FROM usuarios where Username='$Usuario' or Dni_usuario='$DNI'";
+    if ($result = $connection->query($consulta)) {
+
+      //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+      if ($result->num_rows==0) {
+        $consulta="INSERT INTO usuarios VALUES (null,'$Usuario',md5('$Password'),'$Email','Activo','user','$DNI','$Nombre','$Apellidos',$CPostal,$Telefono,'$Sexo',$FNacimiento,'$Direccion')";
+
+       $connection->query($consulta);
+       //var_dump($consulta);
+       //echo $connection->error;
+      } else {
+        echo "El usuario ya exite o esta usando el mismo DNI de un usuario registrado anteriormente";
+      }
+
+
+    }else {
+      echo $connection->error;
+    }
 
     ?>
 
