@@ -6,7 +6,7 @@
     <title></title>
     <link rel="stylesheet" type="text/css" href=" ">
     </head>
-    <body>
+    <body style="background-image:url('./logo/fondo.jpg')">
 
         <?php if (!isset($_POST["Nombre"])) : ?>
       <center>
@@ -84,6 +84,7 @@
 
       </table>
       </form>
+      <a href="index.php"><input type="submit" value="Volver"></a>
     </center>
 
     <?php else: ?>
@@ -125,6 +126,7 @@
         echo "El usuario ya exite o esta usando el mismo DNI de un usuario registrado anteriormente";
       }
 
+      header('Location: index.php');
 
     }else {
       echo $connection->error;

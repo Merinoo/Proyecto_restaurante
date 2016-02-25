@@ -9,7 +9,7 @@ session_start();
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./Css/redes_sociales.css" rel="stylesheet" type="text/css">
+    <link href="./Css/contacto.css" rel="stylesheet" type="text/css">
     <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
   </head>
 
@@ -23,9 +23,9 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./menu.php">Menú</a></li>
-                  <li><a href="./redes_sociales.php">Redes sociales</a></li>
-                  <li><a href="./contacto.php">Contacto</a></li>
+                  <li><a class="active" href="./index.php">Inicio</a></li>
+                  <li><a href="./menu.php">Menú</a></li>
+                  <li><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right; list-style-type:none;">
                   <li><a href="#about">Acerca de nosotros</a></li>
 
@@ -126,9 +126,16 @@ session_start();
             ?>
 
 
+          <div id='slidercentral' style="background-image:url('./logo/fondo.jpg')" >
 
-          <div id='slidercentral'>
-            slidercentral
+
+            <div id="mapa">
+              <center>
+                <h1>Ubicación del sitio</h1>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5487.584321657481!2d-6.040182601360675!3d37.38870278352804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126c9a58c43309%3A0x554e1ff58b68838e!2sCalle+Almer%C3%ADa%2C+41910+Camas%2C+Sevilla!5e0!3m2!1ses!2ses!4v1454677864634" width="700" height="550" frameborder="0" style="border:0" allowfullscreen></iframe>
+              <p><b>Email:</b>barmeri@gmail.com <b>Teléfono:</b>954-39-18-11</p>
+              </center>
+            </div>
           </div>
 
           <div id='pie'>

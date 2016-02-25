@@ -22,9 +22,9 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./menu.php">Menú</a></li>
-                  <li><a href="./redes_sociales.php">Redes sociales</a></li>
-                  <li><a href="./contacto.php">Contacto</a></li>
+                  <li><a class="active" href="./index.php">Inicio</a></li>
+                  <li><a href="./menu.php">Menú</a></li>
+                  <li><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right; list-style-type:none;">
                   <li><a href="#about">Acerca de nosotros</a></li>
 
@@ -152,11 +152,41 @@ session_start();
 
           <div id='slidercentral' style="padding-left:5%; padding-top:2%">
             <!-- se cargaran tantos divs como productos haya en la base de datos -->
-            <div style="border:solid red 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
-              <img src="./Imagenes_menu/bebidas.jpg" style="width:70%;height:80%;margin-left:15%">
-              <center><h1 style="margin-top:0px">Producto 01</h1></center>
-            </div>
 
+            <?php
+            //Conexion con la base de datos
+            $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+            if ($connection->connect_errno) {
+                  printf("Connection failed: %s\n", $connection->connect_error);
+                  exit();
+              }
+
+            //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
+            $consulta="select * from PRODUCTO";
+
+            if ($result = $connection->query($consulta)) {
+
+                  //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+                  if ($result->num_rows==0) {
+                    //echo "EL USUARIO NO EXISTE";
+                  } else {
+                      //Coge los datos devueltos por la consulta.
+                      while($fila=$result->fetch_object()){
+                          echo '<div style="border:solid red 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
+                          <img src="./Imagenes_menu/bebidas.jpg" style="width:70%;height:80%;margin-left:15%">
+                          <center><h1 style="margin-top:0px">'.$fila->Nombre.'</h1></center>
+                        </div>';
+                      }
+
+
+                  }
+
+              } else {
+
+              }
+
+
+            ?>
 
 
 

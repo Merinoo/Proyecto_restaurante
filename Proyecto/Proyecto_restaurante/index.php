@@ -36,14 +36,13 @@ session_start();
           <div id='menucabecera'>
 
               <div id="logo">
-
               </div>
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./menu.php">Menú</a></li>
-                  <li><a href="./redes_sociales.php">Redes sociales</a></li>
-                  <li><a href="./contacto.php">Contacto</a></li>
+                  <li><a class="active" href="./index.php">Inicio</a></li>
+                  <li><a href="./menu.php">Menú</a></li>
+                  <li><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right; list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -104,13 +103,8 @@ session_start();
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
-
-                    //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
+                    include("./conexion.php");
+                    //Aqui p;onemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
 
                     if ($result = $connection->query($consulta)) {
@@ -131,7 +125,7 @@ session_start();
                                   header("Location: index.php");
 
                               }else{
-                                  header("Location: indexadmin.php");
+                                  header("Location: ./admin/indexadmin.php");
                               }
 
                           }

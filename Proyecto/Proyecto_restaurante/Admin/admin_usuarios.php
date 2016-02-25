@@ -7,14 +7,14 @@ session_start();
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./Css/indexhtml.css" rel="stylesheet" type="text/css">
-      <link href="./Css/login.css" rel="stylesheet" type="text/css">
+    <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
+      <link href="../Css/login.css" rel="stylesheet" type="text/css">
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -28,7 +28,7 @@ session_start();
 
   </head>
 
-    <body style="background-image:url('./logo/fondo.jpg')">
+    <body style="background-image:url('../logo/fondo.jpg')">
 
       <div id='global'>
           <div id='menucabecera'>
@@ -39,11 +39,10 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./menu.html">Menú</a></li>
-                  <li><a href="./redes_sociales.html">Redes sociales</a></li>
-                  <li><a href="./contacto.html">Contacto</a></li>
+                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
                     <ul style="float:right;list-style-type:none;">
-                  <li><a href="#about">Acerca de nosotros</a></li>
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
@@ -53,7 +52,7 @@ session_start();
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
                           <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
-                          <li><a href="index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
+                            <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -61,7 +60,7 @@ session_start();
                       if(empty($_GET["logout"])){
                       }else{
                         session_destroy();
-                        header("Location: index.php");
+                        header("Location: ../index.php");
                       }
                     ?>
 
@@ -70,7 +69,7 @@ session_start();
                           <div>	<a href="#close" title="Close" class="close">X</a>
                                <h2><center>Login</center></h2>
                                <form method="post" action="./index.php">
-                                 <table>
+                                 <table class="table">
                                    <tr>
                                       <td><input type="text" id="user" name ="user" placeholder="Usuario"></td>
                                    </tr>
@@ -124,10 +123,10 @@ session_start();
                               }
                               //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
                               if ($tipouser=="user"){
-                                  header("Location: index.php");
+                                  header("Location: ../index.php");
 
                               }else{
-                                  header("Location: indexadmin.php");
+                                  header("Location: ../admin/indexadmin.php");
                               }
 
                           }
@@ -142,8 +141,10 @@ session_start();
 
 
       <div id='slidercentral'>
-        <table style="width:400px;margin:0 auto;text-align:center" border="1">
-            <tr>
+
+        <div id="tabla" class="container">
+        <table   style="margin-top:20px"  class="table">
+            <tr class="active">
               <th>Usuario</th>
               <th>Email</th>
               <th>Tipo</th>
@@ -174,24 +175,29 @@ session_start();
               } else {
                     while($fila=$result->fetch_object()){
                         echo "<tr>
-                                <td>".$fila->Username."</td>
-                                <td>".$fila->Email."</td>
-                                <td>".$fila->Tipo."</td>
-                                <td>".$fila->Dni_usuario."</td>
-                                <td>".$fila->Nombre."</td>
-                                <td>".$fila->Apellidos."</td>
-                                <td>".$fila->Telefono."</td>
+                                <td>$fila->Username</td>
+                                <td>$fila->Email</td>
+                                <td>$fila->Tipo</td>
+                                <td>$fila->Dni_usuario</td>
+                                <td>$fila->Nombre</td>
+                                <td>$fila->Apellidos</td>
+                                <td>$fila->Telefono</td>
                                 <td>
-                                  <a href='admin_editar_usuarios.php?idusuario=".$fila->idusuario."'>Editar</a>
-                                  <a href='admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'>Borrar</a>
-                              </td>
+                                  <a href='../admin/editar_admin_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-warning'>Editar</button></a>
+                                  <a href='../admin/admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-danger'>Borrar</button></a>
                               </tr>";
                     }
               }
         }
 
+
+
+
+
+
         ?>
       </table>
+    </div>
       </div>
 
           <div id='pie'>
