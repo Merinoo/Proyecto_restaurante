@@ -106,7 +106,7 @@ session_start();
                     include("./conexion.php");
                     //Aqui p;onemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
-
+                    var_dump($consulta);
                     if ($result = $connection->query($consulta)) {
 
                           //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
@@ -114,6 +114,9 @@ session_start();
                             //echo "EL USUARIO NO EXISTE";
                           } else {
                               //Coge los datos devueltos por la consulta.
+                              var_dump($user);
+                              var_dump($pass);
+
                               while($fila=$result->fetch_object()){
                                   $tipouser=$fila->Tipo;
                                 //Creamos la session
@@ -131,7 +134,7 @@ session_start();
                           }
 
                       } else {
-
+                          echo $connection->error();
                       }
 
                 }
