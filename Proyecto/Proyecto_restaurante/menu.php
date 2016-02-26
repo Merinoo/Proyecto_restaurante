@@ -13,7 +13,7 @@ session_start();
     <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
   </head>
 
-    <body  style="background-image:url('./logo/fondo.jpg')">
+    <body  style="background-image:url('./logo/fondo.jpg');">
 
       <div id='global'>
           <div id='menucabecera'>
@@ -129,7 +129,7 @@ session_start();
                   <ul>
                       <li class="">
                         <img src="./Imagenes_menu/bebidas.jpg"/>
-                        <a href="./menu.php?tipo=Bebida">Bebidas</a>
+                        <a href="./menu.php?tipo=Bebidas">Bebidas</a>
                       </li>
 
                       <li class="color_submenu2">
@@ -177,7 +177,7 @@ session_start();
                   } else {
                       //Coge los datos devueltos por la consulta.
                       while($fila=$result->fetch_object()){
-                          echo '<div style="border:solid red 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
+                          echo '<div style="border:solid black 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
                           <img src="./Imagenes_menu/'.$fila->Imagen.'" style="width:70%;height:80%;margin-left:15%">
                           <center><a href="./ver_detalles_prod.php?codigoprod='.$fila->IdProducto.'"><h1 style="margin-top:0px">'.$fila->Nombre.'</h1></a></center>
                         </div>';

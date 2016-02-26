@@ -127,11 +127,11 @@ session_start();
 
 
           <div id='slidercentral' >
-              <div class="" style="position:relative;width:80%;height:40px;border:solid red 1px;top:30px;margin:0 auto;">
+              <div class="" style="position:relative;width:80%;height:40px;border:solid black 1px;top:30px;margin:0 auto;">
                 <h2 style="position:relative;font-family:sans-serif;top:-10px">DETALLES DEL PRODUCTO</h2>
               </div>
-              <div class="" style="position:relative;width:80%;height:300px;border:solid red 1px;top:40px;margin:0 auto;">
-                  <div class="" style="float:left;border:solid red 1px;width:40%;height:100%;">
+              <div class="" style="position:relative;width:80%;height:300px;border:solid black 1px;top:40px;margin:0 auto;">
+                  <div class="" style="float:left;border:solid black 1px;width:40%;height:100%;">
 
                     <?php
                     $connection = new mysqli("localhost", "merino", "1234", "proyecto");
@@ -143,12 +143,12 @@ session_start();
                     $consulta="select * from producto where IdProducto='".$_GET["codigoprod"]."';";
                     if($result=$connection->query($consulta)){
                       while ($fila=$result->fetch_object()) {
-                          echo '<img src="./Imagenes_menu/'.$fila->Imagen.'" style="width:50%;height:50%;" alt="" />';
+                          echo '<img src="./Imagenes_menu/'.$fila->Imagen.'" style="width:100%;height:100%;" alt="" />';
                       }
                     }
                      ?>
                   </div>
-                  <div style="float:right;border:solid red 1px;width:55%;height:100%;">
+                  <div style="float:right;border:solid black 1px;width:55%;height:100%;">
                     <table>
                       <?php
                         $connection = new mysqli("localhost", "merino", "1234", "proyecto");
@@ -176,7 +176,7 @@ session_start();
                                       <td>Cantidad: </td>
                                       <td>'.$fila->Cantidad.'</td>
                                     </tr>';
-                                    
+
                           }
                         }
                        ?>

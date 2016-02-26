@@ -173,7 +173,9 @@ ob_start();
                       </tr>
                       <tr>
                         <td colspan="2">
+                          <center>
                           <img src="" style="border:solid red 1px; width:150px; height:150px" id="imagen_movil"/>
+                          </center>
                         </td>
                       </tr>
 

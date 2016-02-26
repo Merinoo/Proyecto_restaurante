@@ -13,4 +13,3 @@ Dentro de la carpeta Proyecto podremos encontrar Ficheros:
 -PHP
 
 Dentro de los cuales encontrareis su .sql y una foto que mostrara la base de datos utilizada.
-
