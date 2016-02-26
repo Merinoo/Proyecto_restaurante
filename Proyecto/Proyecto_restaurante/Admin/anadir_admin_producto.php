@@ -42,7 +42,7 @@ ob_start();
                 <ul>
                   <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li><a href="../admin/admin_producto.php">Productos</a></li>
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -118,96 +118,84 @@ ob_start();
       <div id='slidercentral'>
         <center>
 
-          <form method="POST" action="#">
-        <?php
+          <form method="POST" enctype="multipart/form-data" action="#">
+            <table border=0>
 
-          $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-          $valor=$_GET ["idusuario"];
-          $consulta="select * FROM usuarios where idusuario=$valor";
-          $result=$connection->query($consulta);
-          $fila=$result->fetch_object();
+                  <h2>Añade tu Producto</h2>
+
+                  <table border=0>
+
+                    <tr>
+                      <td>Tipo Producto:</td>
+                      <td>
+                        <select name="Productos">
+                          <option value="Bebidas">Bebida</option>
+                          <option value="Comida">Comida</option>
+                          <option value="Postres">Postres</option>
+                          <option value="Complementos">Complementos</option>
+                        </select>
+                      <input type="hidden" name="idproducto" maxlength="9" size="30" value="" required></td><br>
+                    </tr>
+
+                    <tr>
+                      <td>Nombre:</td>
+                      <td><input type="text" name="Nombre" maxlength="25" size="30" placeholder="Nombre del producto"  value="" required></td>
+                    </tr>
+
+                    <tr>
+                      <td>Precio:</td>
+                      <td><input type="number" name="Precio" min="1" step="any" placeholder="1.00" size="30" value="0" required></td>
+                    </tr>
+
+                    <tr>
+                      <td>Cantidad:</td>
+                      <td><input type="number" name="Cantidad" min="1" step="any" value="'0" placeholder="10"required></td>
+                    </tr>
+                    <tr>
+                      <td>Imagen:</td>
+                      <td>
+                        <input type="file" name="imagen" id="imagen" />
+                      </td>
+                                <script language="javascript">
+                                    function readURL(input) {
+                                        if (input.files && input.files[0]) {
+                                            var reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                $('#imagen_movil').attr('src', e.target.result);
+                                            }
+                                            reader.readAsDataURL(input.files[0]);
+                                        }
+                                    }
+                                    $("#imagen").change(function(){
+                                        readURL(this);
+                                    });
+                                </script>
+                      </tr>
+                      <tr>
+                        <td colspan="2">
+                          <img src="" style="border:solid red 1px; width:150px; height:150px" id="imagen_movil"/>
+                        </td>
+                      </tr>
+
+                    <tr>
+                    <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
+                    </tr>
+
+                  </table>
 
 
-    echo'<table border=0>
-
-          <h2>Datos personales</h2>
-
-          <table border=0>
-
-            <tr>
-              <td>DNI:</td>
-              <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="'.$fila->Dni_usuario.'" required>
-              <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
-            </tr>
-
-            <tr>
-              <td>Nombre:</td>
-              <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Apellidos:</td>
-              <td><input type="text" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="'.$fila->Apellidos.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Direccion:</td>
-              <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="'.$fila->Direccion.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Teléfono:</td>
-              <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="'.$fila->Telefono.'" required></td><br>
-            </tr>
-
-            <tr>
-              <td>C.Postal:</td>
-              <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" value="'.$fila->Cpostal.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Sexo:</td>';
-              if($fila->Sexo=='Hombre'){
-              echo    '<td><input type="radio" name="Sexo" value="Hombre" checked>Hombre<Input type="radio" name="Sexo" value="Mujer">Mujer </td>';
-              }else{
-              echo    '<td><input type="radio" name="Sexo" value="Hombre">Hombre<Input type="radio" name="Sexo" value="Mujer" checked>Mujer </td>';
-              }
-              echo '
-            </tr>
-
-            <tr>
-              <td>F.Nacimiento:</td>
-              <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" value="'.$fila->FNacimiento.'" /></td>
-            </tr>
-
-            <tr>
-              <td>Email:</td>
-              <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="'.$fila->Email.'" required></td>
-            </tr>
-
-            <tr>
-            <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
-            </tr>
-
-          </table>';
-
-          ?>
-          </form>
+                  </form>
           <?php
 
           if(isset($_POST["Nombre"])){
 
-
-          $DNI=$_POST["Dni_usuario"];
+          $idproducto=$_POST["idproducto"];
+          $tipo=$_POST["Productos"];
+          //$imagen=$_POST["imagen"];
           $Nombre=$_POST["Nombre"];
-          $Apellidos=$_POST["Apellidos"];
-          $Direccion=$_POST["Direccion"];
-          $Telefono=$_POST["Telefono"];
-          $CPostal=$_POST["CPostal"];
-          $Sexo=$_POST["Sexo"];
-          $FNacimiento=$_POST["FNacimiento"];
-          $Email=$_POST["Email"];
-          $idusu=$_POST["idusu"];
+          $precio=$_POST["Precio"];
+          $Cantidad=$_POST["Cantidad"];
+
           //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
           //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
 
@@ -217,17 +205,55 @@ ob_start();
                 printf("Connection failed: %s\n", $connection->connect_error);
                 exit();
             }
-          $consulta="UPDATE usuarios SET Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos='$Apellidos',Cpostal=$CPostal,Telefono=$Telefono,Sexo='$Sexo',FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE idusuario=$idusu";
+
+            $ruta="";
+              if ($_FILES["imagen"]["error"] > 0){
+                      echo "ha ocurrido un error";
+              } else {
+                      //ahora vamos a verificar si el tipo de archivo es un tipo de imagen permitido.
+                      //y que el tamano del archivo no exceda los 100kb
+                      $permitidos = array("image/jpg", "image/jpeg", "image/gif", "image/png");
+                      $limite_kb = 4000;
+                      if (in_array($_FILES['imagen']['type'], $permitidos) && $_FILES['imagen']['size'] <= $limite_kb * 1024){
+                        //esta es la ruta donde copiaremos la imagen
+                        //recuerden que deben crear un directorio con este mismo nombre
+                        //en el mismo lugar donde se encuentra el archivo subir.php
+                        $ruta = "../imagenes_menu/" . $_FILES['imagen']['name'];
+                        //comprovamos si este archivo existe para no volverlo a copiar.
+                        //pero si quieren pueden obviar esto si no es necesario.
+                        //o pueden darle otro nombre para que no sobreescriba el actual.
+                        if (!file_exists($ruta)){
+                            //aqui movemos el archivo desde la ruta temporal a nuestra ruta
+                            //usamos la variable $resultado para almacenar el resultado del proceso de mover el archivo
+                            //almacenara true o false
+                            $resultado = @move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta);
+                            if ($resultado){
+                              echo "el archivo ha sido movido exitosamente";
+                            } else {
+                              echo "ocurrio un error al mover el archivo.";
+                            }
+                        } else {
+                            echo $_FILES['imagen']['name'] . ", este archivo existe";
+                        }
+                      } else {
+                        echo "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
+                      }
+          }
+          $ruta=$_FILES['imagen']['name'];
+          //INSERT INTO `producto`(`IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `imagen`) VALUES (null,'$tipo','$Nombre',$precio,$Cantidad,'')
+          $consulta="INSERT INTO `producto`(`IdProducto`,`Tipo_producto`, `Nombre`, `Precio`, `Cantidad`,`Imagen`) VALUES (null,'$tipo','$Nombre',$precio,$Cantidad,'$ruta')";
+
           if($result=$connection->query($consulta)){
             //header("Location: admin_usuarios.php");
 
             //echo $consulta;
             echo '<p><b>Consulta actualizada</b></p>';
-            header("Location: ../admin/admin_usuarios.php");
+            header("Location: ../admin/admin_producto.php");
 
 
           }else{
             echo $connection->error;
+            echo $consulta;
           }
         }
           ?>

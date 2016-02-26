@@ -8,8 +8,8 @@ ob_start();
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
-      <link href="../Css/login.css" rel="stylesheet" type="text/css">
+    <link href="./Css/indexhtml.css" rel="stylesheet" type="text/css">
+      <link href="./Css/login.css" rel="stylesheet" type="text/css">
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -40,9 +40,9 @@ ob_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li><a class="active" href="./index.php">Inicio</a></li>
+                  <li><a href="./menu.php">Menú</a></li>
+                  <li><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -53,7 +53,7 @@ ob_start();
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
                           <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
-                            <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
+                            <li><a href="./index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -61,7 +61,7 @@ ob_start();
                       if(empty($_GET["logout"])){
                       }else{
                         session_destroy();
-                        header("Location: ../admin/index.php");
+                        header("Location: ./admin/index.php");
                       }
                     ?>
 
@@ -117,52 +117,106 @@ ob_start();
 
       <div id='slidercentral'>
         <center>
+          <form class="" action="#" method="post">
+            <h2 style="margin-top:20px">Cambiar contraseña</h2>
+
+            <table border=0 style="width:400px;">
+              <tr>
+                <td>Antigua contraseña:</td>
+                <td> <input type="password" name="apass" style="width:100%;" value=""> </td>
+              </tr>
+              <tr>
+                <td>Nueva contraseña: </td>
+                <td> <input type="password" name="npass1" style="width:100%;" value=""> </td>
+              </tr>
+              <tr>
+                <td>Repetir contraseña:</td>
+                <td> <input type="password" name="npass2" style="width:100%;" value=""> </td>
+              </tr>
+              <tr>
+                <td colspan="2"> <input type="submit" name="name" value="cambiar" style="float:right;"> </td>
+              </tr>
+            </table>
+          </form>
+
+          <?php
+            if(isset($_POST["apass"])){
+                 $apass=$_POST["apass"]; //12345
+                 $npass1=$_POST["npass1"]; //12
+                 $npass2=$_POST["npass2"]; //12
+
+                 if($npass1==$npass2){
+                   $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+                   if ($connection->connect_errno) {
+                         printf("Connection failed: %s\n", $connection->connect_error);
+                         exit();
+                   }
+                   $consulta="SELECT * FROM usuarios WHERE Username='".$_SESSION["user"]."' AND Password=md5('$apass')";
+                   if($result=$connection->query($consulta)){
+                     if($result->num_rows==0){
+                       echo '<p>El usuario tiene una pass diferente</p>';
+                     }else{
+                       echo "<p>El usuario tiene la pass $apass</p>";
+                       $consultaModificarPass="UPDATE usuarios SET Password=md5('$npass1') WHERE Username='".$_SESSION["user"]."'";
+                       $connection->query($consultaModificarPass);
+                      header("Location: ./index.php");
+                     }
+                   }
+                 }else{
+                   echo '<p>No coinciden las nuevas contraseñas</p>';
+                 }
+            }
+          ?>
+
+
+
+
 
           <form method="POST" action="#">
+
         <?php
 
           $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-          $valor=$_GET ["idusuario"];
-          $consulta="select * FROM usuarios where idusuario=$valor";
+          $consulta="select * FROM usuarios where Username='".$_SESSION["user"]."'";
           $result=$connection->query($consulta);
-          $fila=$result->fetch_object();
+          while($fila=$result->fetch_object()){
 
 
-    echo'<table border=0>
+    echo'
 
           <h2>Datos personales</h2>
 
-          <table border=0>
+          <table border=0 style="width:400px;">
 
             <tr>
               <td>DNI:</td>
-              <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="'.$fila->Dni_usuario.'" required>
-              <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
+              <td><input type="text" style="width:100%;" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="'.$fila->Dni_usuario.'" required>
+              <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="'.$fila->idusuario.'" required></td><br>
             </tr>
 
             <tr>
               <td>Nombre:</td>
-              <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
+              <td><input type="text" style="width:100%;" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
             </tr>
 
             <tr>
               <td>Apellidos:</td>
-              <td><input type="text" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="'.$fila->Apellidos.'" required></td>
+              <td><input type="text" style="width:100%;" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="'.$fila->Apellidos.'" required></td>
             </tr>
 
             <tr>
               <td>Direccion:</td>
-              <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="'.$fila->Direccion.'" required></td>
+              <td><input type="text" style="width:100%;" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="'.$fila->Direccion.'" required></td>
             </tr>
 
             <tr>
               <td>Teléfono:</td>
-              <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="'.$fila->Telefono.'" required></td><br>
+              <td><input type="text" style="width:100%;" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="'.$fila->Telefono.'" required></td><br>
             </tr>
 
             <tr>
               <td>C.Postal:</td>
-              <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" value="'.$fila->Cpostal.'" required></td>
+              <td><input type="text"  style="width:100%;" name="CPostal" maxlength="5" size="18" placeholder="41900" value="'.$fila->Cpostal.'" required></td>
             </tr>
 
             <tr>
@@ -177,12 +231,12 @@ ob_start();
 
             <tr>
               <td>F.Nacimiento:</td>
-              <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" value="'.$fila->FNacimiento.'" /></td>
+              <td><input type="date" style="width:100%;" name="FNacimiento" size="18" placeholder="1990-12-27" value="'.$fila->FNacimiento.'" /></td>
             </tr>
 
             <tr>
               <td>Email:</td>
-              <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="'.$fila->Email.'" required></td>
+              <td><input type="text" style="width:100%;" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="'.$fila->Email.'" required></td>
             </tr>
 
             <tr>
@@ -190,7 +244,7 @@ ob_start();
             </tr>
 
           </table>';
-
+}
           ?>
           </form>
           <?php
@@ -223,7 +277,7 @@ ob_start();
 
             //echo $consulta;
             echo '<p><b>Consulta actualizada</b></p>';
-            header("Location: ../admin/admin_usuarios.php");
+            header("Location: ./index.php");
 
 
           }else{

@@ -2,6 +2,7 @@
 <?php
 //Crear variable de session
 session_start();
+ob_start();
 ?>
 <html>
   <head>
@@ -41,7 +42,7 @@ session_start();
                 <ul>
                   <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -60,7 +61,7 @@ session_start();
                       if(empty($_GET["logout"])){
                       }else{
                         session_destroy();
-                        header("Location: ../index.php");
+                        header("Location: ../admin/index.php");
                       }
                     ?>
 
@@ -68,7 +69,7 @@ session_start();
                       <div id="login" class="loginDialog">
                           <div>	<a href="#close" title="Close" class="close">X</a>
                                <h2><center>Login</center></h2>
-                               <form method="post" action="./index.php">
+                               <form method="post" action="../admin/indexadmin.php">
                                  <table class="table">
                                    <tr>
                                       <td><input type="text" id="user" name ="user" placeholder="Usuario"></td>
@@ -108,97 +109,95 @@ session_start();
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
 
-                    if ($result = $connection->query($consulta)) {
-
-                          //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
-                          if ($result->num_rows==0) {
-                            //echo "EL USUARIO NO EXISTE";
-                          } else {
-                              //Coge los datos devueltos por la consulta.
-                              while($fila=$result->fetch_object()){
-                                  $tipouser=$fila->Tipo;
-                                //Creamos la session
-                                $_SESSION["user"]=$user;
-                                $_SESSION["tipo"]=$tipouser;
-                              }
-                              //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
-                              if ($tipouser=="user"){
-                                  header("Location: ../index.php");
-
-                              }else{
-                                  header("Location: ../admin/indexadmin.php");
-                              }
-
-                          }
-
-                      } else {
-
-                      }
-
+  //UPDATE usuarios SET idusuario=,Username=,Password=,Email=,Actividad=,Tipo=,Dni_usuario=,Nombre=,Apellidos=,Cpostal=,Telefono=,Sexo=,FNacimiento=,Direccion WHERE 1
                 }
 
             ?>
 
 
       <div id='slidercentral'>
-        <center><H3>TABLA DE USUARIOS</H3> </center>
-        <a href='../admin/anadir_admin_usuario.php' style="margin-left:91.5%"><button type='button' class='btn btn-success'>Añadir</button></a>
-        <div id="tabla" class="container">
-        <table   style="margin-top:20px"  class="table">
-            <tr class="active">
-              <th>Usuario</th>
-              <th>Email</th>
-              <th>Tipo</th>
-              <th>DNI</th>
-              <th>Nombre</th>
-              <th>Apellidos</th>
-              <th>Telefono</th>
-              <th>Operaciones</th>
-            </tr>
+        <center>
+
+          <form method="POST" action="#">
         <?php
-        $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-        if ($connection->connect_errno) {
-              printf("Connection failed: %s\n", $connection->connect_error);
-              exit();
+
+          $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+          $valor=$_GET ["IdProducto"];
+          $consulta="select * FROM producto where IdProducto=$valor";
+          $result=$connection->query($consulta);
+          $fila=$result->fetch_object();
+
+//SELECT `IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `imagen` FROM `producto` WHERE 1
+    echo'<table border=0>
+
+          <h2>Datos personales</h2>
+
+          <table border=0>
+
+            <tr>
+              <td>Tipo Producto:</td>
+              <td><input type="text" name="Tipo_producto" maxlength="40" size="70" placeholder="comida" value="'.$fila->Tipo_producto.'" required>
+              <input type="hidden" name="idproducto" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
+            </tr>
+
+            <tr>
+              <td>Nombre:</td>
+              <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
+            </tr>
+
+            <tr>
+              <td>Precio:</td>
+              <td><input type="number" name="Precio" step="any" min="0" placeholder="1.00€" value="'.$fila->Precio.'" required></td>
+            </tr>
+
+            <tr>
+              <td>Cantidad:</td>
+              <td><input type="number" name="Cantidad" step="any" min="0"  value="'.$fila->Cantidad.'" required></td>
+            </tr>
+
+            <tr>
+            <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
+            </tr>
+
+          </table>';
+
+          ?>
+          </form>
+          <?php
+
+          if(isset($_POST["Nombre"])){
+
+
+          $tipo=$_POST["Tipo_producto"];
+          $Nombre=$_POST["Nombre"];
+          $precio=$_POST["Precio"];
+          $Cantidad=$_POST["Cantidad"];
+          $idproducto=$_POST["idproducto"];
+          //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
+          //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
+
+          //Conexion con la base de datos
+          $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+          if ($connection->connect_errno) {
+                printf("Connection failed: %s\n", $connection->connect_error);
+                exit();
+            }
+          $consulta="UPDATE producto SET Tipo_producto='$tipo',Precio='$precio',Nombre='$Nombre',Cantidad='$Cantidad' WHERE IdProducto=$idproducto";
+          if($result=$connection->query($consulta)){
+            //header("Location: admin_usuarios.php");
+
+            //echo $consulta;
+            echo '<p><b>Consulta actualizada</b></p>';
+            header("Location: ../admin/admin_producto.php");
+
+
+          }else{
+            echo $connection->error;
           }
-
-        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
-        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
-
-        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="select * from usuarios";
-
-        if ($result = $connection->query($consulta)) {
-
-              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
-              if ($result->num_rows==0) {
-                //echo "EL USUARIO NO EXISTE";
-              } else {
-                    while($fila=$result->fetch_object()){
-                        echo "<tr>
-                                <td>$fila->Username</td>
-                                <td>$fila->Email</td>
-                                <td>$fila->Tipo</td>
-                                <td>$fila->Dni_usuario</td>
-                                <td>$fila->Nombre</td>
-                                <td>$fila->Apellidos</td>
-                                <td>$fila->Telefono</td>
-                                <td>
-                                  <a href='../admin/editar_admin_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-warning'>Editar</button></a>
-                                  <a href='../admin/admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-danger'>Borrar</button></a>
-                              </tr>";
-                    }
-              }
         }
+          ?>
 
-
-
-
-
-
-        ?>
-      </table>
-    </div>
+        </center>
       </div>
 
           <div id='pie'>

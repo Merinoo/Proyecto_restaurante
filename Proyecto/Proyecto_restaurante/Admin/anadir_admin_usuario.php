@@ -42,7 +42,7 @@ ob_start();
                 <ul>
                   <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li><a href="../admin/admin_producto.php">Productos</a></li>
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -119,95 +119,95 @@ ob_start();
         <center>
 
           <form method="POST" action="#">
-        <?php
+            <table border=0>
 
-          $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-          $valor=$_GET ["idusuario"];
-          $consulta="select * FROM usuarios where idusuario=$valor";
-          $result=$connection->query($consulta);
-          $fila=$result->fetch_object();
+                  <h2>Añade tu Usuario</h2>
+
+                  <table border=0>
+                    <tr>
+                      <td>Usuario:</td>
+                      <td><input type="text" name="Username" maxlength="25" size="18" placeholder="merino"  required></td>
+                    </tr>
+
+                    <tr>
+                      <td>Contraseña:</td>
+                      <td><input type="password" name="Password" maxlength="15"size="18" placeholder="*****" required></td>
+                    </tr>
+                      <tr>
+                        <td>DNI:</td>
+                        <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="" required>
+                        <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="" required></td><br>
+                      </tr>
+
+                      <tr>
+                        <td>Nombre:</td>
+                        <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="" required></td>
+                      </tr>
+
+                      <tr>
+                        <td>Apellidos:</td>
+                        <td><input type="text" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="" required></td>
+                      </tr>
+
+                      <tr>
+                        <td>Direccion:</td>
+                        <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="" required></td>
+                      </tr>
+
+                      <tr>
+                        <td>Teléfono:</td>
+                        <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="" required></td><br>
+                      </tr>
+
+                      <tr>
+                        <td>C.Postal:</td>
+                        <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" value="" required></td>
+                      </tr>
+
+                      <tr>
+                        <td>Sexo:</td>
+                            <td><input type="radio" name="Sexo" value="Hombre" checked>Hombre<Input type="radio" name="Sexo" value="Mujer">Mujer </td>
+                      </tr>
+
+                      <tr>
+                        <td>F.Nacimiento:</td>
+                        <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" value="" ></td>
+                      </tr>
+
+                      <tr>
+                        <td>Email:</td>
+                        <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="" required></td>
+                      </tr>
+
+                      <tr>
+                      <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
+                      </tr>
+
+                    </table>
 
 
-    echo'<table border=0>
-
-          <h2>Datos personales</h2>
-
-          <table border=0>
-
-            <tr>
-              <td>DNI:</td>
-              <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="'.$fila->Dni_usuario.'" required>
-              <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
-            </tr>
-
-            <tr>
-              <td>Nombre:</td>
-              <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Apellidos:</td>
-              <td><input type="text" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="'.$fila->Apellidos.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Direccion:</td>
-              <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="'.$fila->Direccion.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Teléfono:</td>
-              <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="'.$fila->Telefono.'" required></td><br>
-            </tr>
-
-            <tr>
-              <td>C.Postal:</td>
-              <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" value="'.$fila->Cpostal.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Sexo:</td>';
-              if($fila->Sexo=='Hombre'){
-              echo    '<td><input type="radio" name="Sexo" value="Hombre" checked>Hombre<Input type="radio" name="Sexo" value="Mujer">Mujer </td>';
-              }else{
-              echo    '<td><input type="radio" name="Sexo" value="Hombre">Hombre<Input type="radio" name="Sexo" value="Mujer" checked>Mujer </td>';
-              }
-              echo '
-            </tr>
-
-            <tr>
-              <td>F.Nacimiento:</td>
-              <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" value="'.$fila->FNacimiento.'" /></td>
-            </tr>
-
-            <tr>
-              <td>Email:</td>
-              <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="'.$fila->Email.'" required></td>
-            </tr>
-
-            <tr>
-            <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
-            </tr>
-
-          </table>';
-
-          ?>
-          </form>
+                  </form>
           <?php
 
           if(isset($_POST["Nombre"])){
 
+            $Usuario=$_POST["Username"];
+            $Password=$_POST["Password"];
 
-          $DNI=$_POST["Dni_usuario"];
-          $Nombre=$_POST["Nombre"];
-          $Apellidos=$_POST["Apellidos"];
-          $Direccion=$_POST["Direccion"];
-          $Telefono=$_POST["Telefono"];
-          $CPostal=$_POST["CPostal"];
-          $Sexo=$_POST["Sexo"];
-          $FNacimiento=$_POST["FNacimiento"];
-          $Email=$_POST["Email"];
-          $idusu=$_POST["idusu"];
+            $idusu=$_POST["Idusuario"];
+            $DNI=$_POST["Dni_usuario"];
+            $Nombre=$_POST["Nombre"];
+            $Apellidos=$_POST["Apellidos"];
+            $Direccion=$_POST["Direccion"];
+            $Telefono=$_POST["Telefono"];
+            $CPostal=$_POST["CPostal"];
+            $Sexo=$_POST["Sexo"];
+            $FNacimiento=$_POST["FNacimiento"];
+            $Email=$_POST["Email"];
+
+
+
+
           //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
           //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
 
@@ -217,12 +217,12 @@ ob_start();
                 printf("Connection failed: %s\n", $connection->connect_error);
                 exit();
             }
-          $consulta="UPDATE usuarios SET Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos='$Apellidos',Cpostal=$CPostal,Telefono=$Telefono,Sexo='$Sexo',FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE idusuario=$idusu";
-          if($result=$connection->query($consulta)){
-            //header("Location: admin_usuarios.php");
 
-            //echo $consulta;
-            echo '<p><b>Consulta actualizada</b></p>';
+
+          //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
+          $consulta="INSERT INTO usuarios VALUES (null,'$Usuario',md5('$Password'),'$Email','Activo','user','$DNI','$Nombre','$Apellidos',$CPostal,$Telefono,'$Sexo',$FNacimiento,'$Direccion')";
+
+          if($result=$connection->query($consulta)){
             header("Location: ../admin/admin_usuarios.php");
 
 

@@ -129,22 +129,22 @@ session_start();
                   <ul>
                       <li class="">
                         <img src="./Imagenes_menu/bebidas.jpg"/>
-                        <a href="#Bebidas">Bebidas</a>
+                        <a href="./menu.php?tipo=Bebida">Bebidas</a>
                       </li>
 
                       <li class="color_submenu2">
                         <img src="./Imagenes_menu/comidas.jpg"/>
-                        <a href="#Comidas">Comidas</a>
+                        <a href="./menu.php?tipo=Comida">Comidas</a>
                       </li>
 
                       <li class="color_submenu3">
                         <img src="./Imagenes_menu/postres.jpg"/>
-                        <a href="#Postres">Postres</a>
+                        <a href="./menu.php?tipo=Postres">Postres</a>
                       </li>
 
                       <li class="color_submenu4">
                         <img src="./Imagenes_menu/complementos.jpg"/>
-                        <a href="#Complementos">Complementos</a>
+                        <a href="./menu.php?tipo=Complementos">Complementos</a>
                       </li>
                   </ul>
                 </div>
@@ -162,7 +162,12 @@ session_start();
               }
 
             //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-            $consulta="select * from PRODUCTO";
+            $consulta="select * from producto ";
+            if(isset($_GET["tipo"])){
+              if($_GET["tipo"]=="Comida" || $_GET["tipo"]=="Bebida" || $_GET["tipo"]=="Postres" || $_GET["tipo"]=="Complementos" ){
+                $consulta=$consulta . " WHERE Tipo_producto='".$_GET['tipo']."'";
+              }
+            }
 
             if ($result = $connection->query($consulta)) {
 
@@ -173,8 +178,8 @@ session_start();
                       //Coge los datos devueltos por la consulta.
                       while($fila=$result->fetch_object()){
                           echo '<div style="border:solid red 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
-                          <img src="./Imagenes_menu/bebidas.jpg" style="width:70%;height:80%;margin-left:15%">
-                          <center><h1 style="margin-top:0px">'.$fila->Nombre.'</h1></center>
+                          <img src="./Imagenes_menu/'.$fila->Imagen.'" style="width:70%;height:80%;margin-left:15%">
+                          <center><a href="./ver_detalles_prod.php?codigoprod='.$fila->IdProducto.'"><h1 style="margin-top:0px">'.$fila->Nombre.'</h1></a></center>
                         </div>';
                       }
 

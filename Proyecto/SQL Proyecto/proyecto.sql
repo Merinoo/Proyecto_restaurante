@@ -1,167 +1,110 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win32 (AMD64)
+-- phpMyAdmin SQL Dump
+-- version 4.3.11
+-- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1    Database: proyecto
--- ------------------------------------------------------
--- Server version	5.6.24
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 26-02-2016 a las 20:51:10
+-- Versión del servidor: 5.6.24
+-- Versión de PHP: 5.5.24
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cesta`
+-- Base de datos: `proyecto`
 --
 
-DROP TABLE IF EXISTS `cesta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cesta` (
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cesta`
+--
+
+CREATE TABLE IF NOT EXISTS `cesta` (
   `Usuarios_idusuario` int(11) NOT NULL,
   `Producto_IdProducto` int(11) NOT NULL,
-  `Cantidad` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Usuarios_idusuario`,`Producto_IdProducto`),
-  KEY `fk_Cesta_Producto1_idx` (`Producto_IdProducto`),
-  CONSTRAINT `fk_Cesta_Producto1` FOREIGN KEY (`Producto_IdProducto`) REFERENCES `producto` (`IdProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Cesta_Usuarios1` FOREIGN KEY (`Usuarios_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `Cantidad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `cesta`
+-- Estructura de tabla para la tabla `detalle pedido`
 --
 
-LOCK TABLES `cesta` WRITE;
-/*!40000 ALTER TABLE `cesta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cesta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `detalle pedido`
---
-
-DROP TABLE IF EXISTS `detalle pedido`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `detalle pedido` (
+CREATE TABLE IF NOT EXISTS `detalle pedido` (
   `Cantidad` int(11) DEFAULT NULL,
-  `codlinea` int(11) NOT NULL AUTO_INCREMENT,
+  `codlinea` int(11) NOT NULL,
   `Pedidos_Num_pedido` int(11) NOT NULL,
-  `Producto_IdProducto` int(11) NOT NULL,
-  PRIMARY KEY (`codlinea`,`Pedidos_Num_pedido`,`Producto_IdProducto`),
-  KEY `fk_Detalle pedido_Producto1_idx` (`Producto_IdProducto`),
-  KEY `fk_Detalle pedido_Pedidos1` (`Pedidos_Num_pedido`),
-  CONSTRAINT `fk_Detalle pedido_Pedidos1` FOREIGN KEY (`Pedidos_Num_pedido`) REFERENCES `pedidos` (`Num_pedido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Detalle pedido_Producto1` FOREIGN KEY (`Producto_IdProducto`) REFERENCES `producto` (`IdProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `Producto_IdProducto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `detalle pedido`
+-- Estructura de tabla para la tabla `empleados`
 --
 
-LOCK TABLES `detalle pedido` WRITE;
-/*!40000 ALTER TABLE `detalle pedido` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detalle pedido` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `empleados`
---
-
-DROP TABLE IF EXISTS `empleados`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `empleados` (
+CREATE TABLE IF NOT EXISTS `empleados` (
   `idEmpleado` int(11) NOT NULL,
   `Nombre` varchar(45) DEFAULT NULL,
   `Apellidos` varchar(45) DEFAULT NULL,
   `Telefono` int(9) DEFAULT NULL,
-  `Email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idEmpleado`)
+  `Email` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `empleados`
+-- Estructura de tabla para la tabla `pedidos`
 --
 
-LOCK TABLES `empleados` WRITE;
-/*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-/*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pedidos`
---
-
-DROP TABLE IF EXISTS `pedidos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pedidos` (
-  `Num_pedido` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `pedidos` (
+  `Num_pedido` int(11) NOT NULL,
   `Usuario_idusuario` int(11) NOT NULL,
   `Empleados_idEmpleado` int(11) NOT NULL,
   `Fecha_pedido` date DEFAULT NULL,
-  `Coste_total` decimal(9,2) DEFAULT NULL,
-  PRIMARY KEY (`Num_pedido`,`Usuario_idusuario`,`Empleados_idEmpleado`),
-  KEY `fk_Pedidos_Usuario_idx` (`Usuario_idusuario`),
-  KEY `fk_Pedidos_Empleados1_idx` (`Empleados_idEmpleado`),
-  CONSTRAINT `fk_Pedidos_Empleados1` FOREIGN KEY (`Empleados_idEmpleado`) REFERENCES `empleados` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pedidos_Usuario` FOREIGN KEY (`Usuario_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `Coste_total` decimal(9,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `pedidos`
+-- Estructura de tabla para la tabla `producto`
 --
 
-LOCK TABLES `pedidos` WRITE;
-/*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `producto`
---
-
-DROP TABLE IF EXISTS `producto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `producto` (
+CREATE TABLE IF NOT EXISTS `producto` (
   `IdProducto` int(11) NOT NULL,
   `Tipo_producto` varchar(45) DEFAULT NULL,
   `Nombre` varchar(45) DEFAULT NULL,
-  `Precio` decimal(9,2) DEFAULT NULL,
+  `Precio` decimal(6,2) DEFAULT NULL,
   `Cantidad` int(11) DEFAULT NULL,
-  PRIMARY KEY (`IdProducto`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `Imagen` varchar(300) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `producto`
+-- Volcado de datos para la tabla `producto`
 --
 
-LOCK TABLES `producto` WRITE;
-/*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-/*!40000 ALTER TABLE `producto` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `producto` (`IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `Imagen`) VALUES
+(13, 'Comida', 'hg', '4.00', 4, 'fz___lancer_by_janemere-d4ibhbh.png.jpg'),
+(14, 'Bebida', 'fanta', '1.40', 10, '542272_379562578747521_507750072_n.jpg'),
+(15, 'Comida', 'hamburguesa', '2.00', 10, 'comidas.jpg');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usuarios` (
-  `idusuario` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `idusuario` int(11) NOT NULL,
   `Username` varchar(45) DEFAULT NULL,
   `Password` varchar(45) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
@@ -170,34 +113,111 @@ CREATE TABLE `usuarios` (
   `Dni_usuario` varchar(9) DEFAULT NULL,
   `Nombre` varchar(45) DEFAULT NULL,
   `Apellidos` varchar(45) DEFAULT NULL,
-  `C.postal` int(5) DEFAULT NULL,
+  `Cpostal` int(5) DEFAULT NULL,
   `Telefono` int(9) DEFAULT NULL,
   `Sexo` varchar(6) DEFAULT NULL,
-  `F.Nacimiento` date DEFAULT NULL,
-  `Direccion` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idusuario`),
-  UNIQUE KEY `Dni_usuario_UNIQUE` (`Dni_usuario`),
-  UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `FNacimiento` date DEFAULT NULL,
+  `Direccion` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `usuarios`
+-- Volcado de datos para la tabla `usuarios`
 --
 
-LOCK TABLES `usuarios` WRITE;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'japon','81dc9bdb52d04dc20036dbd8313ed055','japon@gmail.com','Activo','user','12345678P','Juan Antonio','Japon',41010,634692434,'Hombre','1991-03-02','C/Clara de jesus montero'),(2,'merino','81dc9bdb52d04dc20036dbd8313ed055','merino@gmail.com','Activo','admin','53344470H','Antonio Manuel','Merino',41900,679210535,'Hombre','1990-12-27','C/Argantonio nº6');
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `usuarios` (`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `Cpostal`, `Telefono`, `Sexo`, `FNacimiento`, `Direccion`) VALUES
+(3, 'japon', '827ccb0eea8a706c4c34a16891f84e7b', 'juanantoniojapon@gmail.com', 'Activo', 'user', '5741852B', 'Juan Antonio', 'Japon', 41896, 603746949, 'Hombre', '2016-02-02', 'C/San Vicente de Paul'),
+(4, 'merino', '81dc9bdb52d04dc20036dbd8313ed055', 'amerino96@gmail.com', 'Activo', 'admin', '53344470H', 'Antonio Manuel', 'Merino Soto', 41900, 679210535, 'Hombre', '0000-00-00', 'C/Argantonio NÂº6'),
+(6, 'b', '81dc9bdb52d04dc20036dbd8313ed055', 'b@gmail.com', 'Activo', 'user', '8767678d', 'b', 'b', 33333, 444444444, 'Hombre', '0000-00-00', 'b');
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `cesta`
+--
+ALTER TABLE `cesta`
+  ADD PRIMARY KEY (`Usuarios_idusuario`,`Producto_IdProducto`), ADD KEY `fk_Cesta_Producto1_idx` (`Producto_IdProducto`);
+
+--
+-- Indices de la tabla `detalle pedido`
+--
+ALTER TABLE `detalle pedido`
+  ADD PRIMARY KEY (`codlinea`,`Pedidos_Num_pedido`,`Producto_IdProducto`), ADD KEY `fk_Detalle pedido_Producto1_idx` (`Producto_IdProducto`), ADD KEY `fk_Detalle pedido_Pedidos1` (`Pedidos_Num_pedido`);
+
+--
+-- Indices de la tabla `empleados`
+--
+ALTER TABLE `empleados`
+  ADD PRIMARY KEY (`idEmpleado`);
+
+--
+-- Indices de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`Num_pedido`,`Usuario_idusuario`,`Empleados_idEmpleado`), ADD KEY `fk_Pedidos_Usuario_idx` (`Usuario_idusuario`), ADD KEY `fk_Pedidos_Empleados1_idx` (`Empleados_idEmpleado`);
+
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`IdProducto`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`idusuario`), ADD UNIQUE KEY `Dni_usuario_UNIQUE` (`Dni_usuario`), ADD UNIQUE KEY `Username_UNIQUE` (`Username`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `detalle pedido`
+--
+ALTER TABLE `detalle pedido`
+  MODIFY `codlinea` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  MODIFY `Num_pedido` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `IdProducto` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `cesta`
+--
+ALTER TABLE `cesta`
+ADD CONSTRAINT `fk_Cesta_Producto1` FOREIGN KEY (`Producto_IdProducto`) REFERENCES `producto` (`IdProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_Cesta_Usuarios1` FOREIGN KEY (`Usuarios_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `detalle pedido`
+--
+ALTER TABLE `detalle pedido`
+ADD CONSTRAINT `fk_Detalle pedido_Pedidos1` FOREIGN KEY (`Pedidos_Num_pedido`) REFERENCES `pedidos` (`Num_pedido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_Detalle pedido_Producto1` FOREIGN KEY (`Producto_IdProducto`) REFERENCES `producto` (`IdProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+ADD CONSTRAINT `fk_Pedidos_Empleados1` FOREIGN KEY (`Empleados_idEmpleado`) REFERENCES `empleados` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_Pedidos_Usuario` FOREIGN KEY (`Usuario_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2016-01-12  0:45:48
