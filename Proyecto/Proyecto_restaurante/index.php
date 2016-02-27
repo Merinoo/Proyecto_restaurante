@@ -58,11 +58,7 @@ session_start();
                           <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
                           <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
                             <?php
-                            $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                            if ($connection->connect_errno) {
-                                  printf("Connection failed: %s\n", $connection->connect_error);
-                                  exit();
-                            }
+                          include("./conexion.php");
 
                             $user=$_SESSION["user"];
                             $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
