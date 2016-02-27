@@ -52,6 +52,13 @@ div#slidercentral{
   position: relative;
 }
 
+div#slidercentral2{
+  margin:0 auto;
+  background-color:silver;
+  position: relative;
+}
+
+
 div#pie{
   margin:0 auto;
   text-align: center;

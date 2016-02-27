@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-
 <?php
 //Crear variable de session
+ob_start();
 session_start();
 ?>
 
@@ -11,6 +11,9 @@ session_start();
     <title></title>
     <link href="./Css/contacto.css" rel="stylesheet" type="text/css">
     <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   </head>
 
     <body>
@@ -23,11 +26,10 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./index.php">Inicio</a></li>
-                  <li><a href="./menu.php">Menú</a></li>
+                  <li><a href="./index.php">Inicio</a></li>
+                  <li class="active"><a href="./menu.php">Menú</a></li>
                   <li><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right; list-style-type:none;">
-                  <li><a href="#about">Acerca de nosotros</a></li>
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
@@ -36,8 +38,31 @@ session_start();
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                          <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
-                          <li><a href="index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
+                          <li><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
+                          <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
+                          <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
+                            <?php
+                            $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+                            if ($connection->connect_errno) {
+                                  printf("Connection failed: %s\n", $connection->connect_error);
+                                  exit();
+                            }
+
+                            $user=$_SESSION["user"];
+                            $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
+                            if($result = $connection->query($consulta)){
+                                  $total=0;
+                                  if($result->num_rows==0){
+                                  }else{
+                                      while($fila=$result->fetch_object()){
+                                          $total=$total+$fila->total;
+                                      }
+                                  }
+                                  echo " ($total)";
+                            }
+                             ?>
+                          </a></li>
+                          <li><a href="ver_detalles_prod.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -130,15 +155,11 @@ session_start();
               <div class="" style="position:relative;width:80%;height:40px;border:solid black 1px;top:30px;margin:0 auto;">
                 <h2 style="position:relative;font-family:sans-serif;top:-10px">DETALLES DEL PRODUCTO</h2>
               </div>
-              <div class="" style="position:relative;width:80%;height:300px;border:solid black 1px;top:40px;margin:0 auto;">
+              <div class="" style="position:relative;width:80%;height:300px;top:40px;margin:0 auto;">
                   <div class="" style="float:left;border:solid black 1px;width:40%;height:100%;">
 
                     <?php
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
+                    include("./conexion.php");
 
                     $consulta="select * from producto where IdProducto='".$_GET["codigoprod"]."';";
                     if($result=$connection->query($consulta)){
@@ -151,11 +172,7 @@ session_start();
                   <div style="float:right;border:solid black 1px;width:55%;height:100%;">
                     <table>
                       <?php
-                        $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                        if ($connection->connect_errno) {
-                              printf("Connection failed: %s\n", $connection->connect_error);
-                              exit();
-                          }
+                      include("./conexion.php");
 
                         $consulta="select * from producto where IdProducto='".$_GET["codigoprod"]."';";
                         if($result=$connection->query($consulta)){
@@ -176,12 +193,49 @@ session_start();
                                       <td>Cantidad: </td>
                                       <td>'.$fila->Cantidad.'</td>
                                     </tr>';
+                              if(isset($_SESSION["tipo"])){
+                                    echo '<tr>
+                                            <td>
+                                                <form class="" action="#" method="post">
+                                                  <input type="hidden" name="idproducto" value="'.$fila->IdProducto.'">
+                                                  <input type="submit" name="añadircarrito" value="Añadir al carrito">
+                                                </form>
+                                            </td>
+                                          </tr>';
+                              }
 
                           }
                         }
                        ?>
-
                     </table>
+                    <?php
+                    if(isset($_POST["idproducto"])){
+                      $idproducto=$_POST["idproducto"];
+
+                      include("./conexion.php");
+
+                      $consultaUser="SELECT idusuario FROM usuarios WHERE Username='".$_SESSION["user"]."'";
+                      $result=$connection->query($consultaUser);
+                      $fila=$result->fetch_object();
+
+                      $idUsuarioLogeado=$fila->idusuario;
+
+                      $consulta = "SELECT * FROM cesta,producto WHERE cesta.Producto_IdProducto = producto.IdProducto AND cesta.Usuarios_idusuario = $idUsuarioLogeado AND cesta.Producto_IdProducto = $idproducto";
+                      if($result = $connection->query($consulta)){
+                          if($result->num_rows==0){
+                            $consultaInsertarCesta = "INSERT INTO cesta VALUES(".$idUsuarioLogeado.",".$idproducto.",1)";
+                            $connection->query($consultaInsertarCesta);
+                            header("Location: ./ver_detalles_prod.php?codigoprod=".$idproducto);
+                          }else{
+                            $consultaActualizarProductoCesta = "UPDATE cesta SET Cantidad = (Cantidad + 1) WHERE Producto_IdProducto = $idproducto AND Usuarios_idusuario = $idUsuarioLogeado";
+                            $connection->query($consultaActualizarProductoCesta);
+                            header("Location: ./ver_detalles_prod.php?codigoprod=".$idproducto);
+                          }
+                        }
+                    }
+
+
+                     ?>
                   </div>
               </div>
 

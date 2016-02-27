@@ -9,8 +9,7 @@
   <?php
 
   //Creamos la conexión 1=Localhost  2="usuario" 3="Contraseña" 4="Base_de_datos"
-  $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-
+  include("../conexion.php");
 
   $valor=$_GET ["IdProducto"]; //Para guardar el parametro en una variable
   //$connection->query  //Para hacer consultas

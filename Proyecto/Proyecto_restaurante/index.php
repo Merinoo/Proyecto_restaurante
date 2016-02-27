@@ -54,7 +54,30 @@ session_start();
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
+                        <li ><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
                           <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
+                          <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
+                            <?php
+                            $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+                            if ($connection->connect_errno) {
+                                  printf("Connection failed: %s\n", $connection->connect_error);
+                                  exit();
+                            }
+
+                            $user=$_SESSION["user"];
+                            $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
+                            if($result = $connection->query($consulta)){
+                                  $total=0;
+                                  if($result->num_rows==0){
+                                  }else{
+                                      while($fila=$result->fetch_object()){
+                                          $total=$total+$fila->total;
+                                      }
+                                  }
+                                  echo " ($total)";
+                            }
+                             ?>
+                          </a></li>
                           <li><a href="index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
                       <?php endif ?>
 

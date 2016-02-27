@@ -8,6 +8,8 @@ session_start();
     <meta charset="UTF-8">
     <title></title>
     <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
+    <link href="../Css/menu.css" rel="stylesheet" type="text/css">
+
       <link href="../Css/login.css" rel="stylesheet" type="text/css">
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
@@ -39,9 +41,11 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
+                  <li><a href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li class="active"><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -99,11 +103,7 @@ session_start();
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
+                    include("../conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
@@ -140,7 +140,9 @@ session_start();
             ?>
 
 
-      <div id='slidercentral' style="border:solid red 1px">
+            <div id='slidercentral2' class="row" >
+              <!-- se cargaran tantos divs como productos haya en la base de datos -->
+              <div class="container" style="margin-botom:40px;margin-top:30px;">
         <center><H3>TABLA DE PRODUCTOS</H3> </center>
         <a href='../admin/anadir_admin_producto.php' style="margin-left:91.5%"><button type='button' class='btn btn-success'>Añadir</button></a>
         <div id="tabla" class="container">
@@ -156,11 +158,7 @@ session_start();
 
             </tr>
         <?php
-        $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-        if ($connection->connect_errno) {
-              printf("Connection failed: %s\n", $connection->connect_error);
-              exit();
-          }
+        include("../conexion.php");
 
         //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
         // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
@@ -184,7 +182,6 @@ session_start();
                                 <td><img src='../Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
                                 <td>
                                   <a href='../admin/editar_admin_producto.php?IdProducto=".$fila->IdProducto."'><button type='button' class='btn btn-warning'>Editar</button></a>
-                                  <a href='../admin/admin_borrar_producto.php?IdProducto=".$fila->IdProducto."'><button type='button' class='btn btn-danger'>Borrar</button></a>
                               </tr>";
                     }
               }
@@ -198,6 +195,7 @@ session_start();
         ?>
       </table>
     </div>
+  </div>
       </div>
 
           <div id='pie'>

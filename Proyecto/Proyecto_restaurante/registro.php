@@ -106,11 +106,7 @@
     //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
 
     //Conexion con la base de datos
-    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-    if ($connection->connect_errno) {
-          printf("Connection failed: %s\n", $connection->connect_error);
-          exit();
-      }
+    include("./conexion.php");
 
     $consulta="SELECT * FROM usuarios where Username='$Usuario' or Dni_usuario='$DNI'";
     if ($result = $connection->query($consulta)) {

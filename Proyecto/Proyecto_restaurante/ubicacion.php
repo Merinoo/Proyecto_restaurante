@@ -23,11 +23,10 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./index.php">Inicio</a></li>
+                  <li><a href="./index.php">Inicio</a></li>
                   <li><a href="./menu.php">Menú</a></li>
-                  <li><a href="./ubicacion.php">Ubicación</a></li>
+                  <li class="active"><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right; list-style-type:none;">
-                  <li><a href="#about">Acerca de nosotros</a></li>
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
@@ -36,7 +35,26 @@ session_start();
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
+                        <li ><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
                           <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
+                          <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
+                            <?php
+                            include("./conexion.php");
+
+                            $user=$_SESSION["user"];
+                            $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
+                            if($result = $connection->query($consulta)){
+                                  $total=0;
+                                  if($result->num_rows==0){
+                                  }else{
+                                      while($fila=$result->fetch_object()){
+                                          $total=$total+$fila->total;
+                                      }
+                                  }
+                                  echo " ($total)";
+                            }
+                             ?>
+                          </a></li>
                           <li><a href="index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
                       <?php endif ?>
 
@@ -85,11 +103,7 @@ session_start();
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
+                    include("./conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";

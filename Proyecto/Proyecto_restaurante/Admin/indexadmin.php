@@ -40,9 +40,11 @@ session_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
+                  <li class="active"><a href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
                   <li><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+
                     <ul style="float:right; list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -103,11 +105,7 @@ session_start();
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
+                    include("../conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
@@ -154,6 +152,7 @@ session_start();
 
 
       </div>
+    </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.

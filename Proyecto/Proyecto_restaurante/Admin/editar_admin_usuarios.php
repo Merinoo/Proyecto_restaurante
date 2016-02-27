@@ -40,9 +40,11 @@ ob_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li><a  href="../admin/indexadmin.php">Inicio</a></li>
+                  <li class="active"><a href="../admin/admin_usuarios.php">Usuarios</a></li>
                   <li><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -52,7 +54,7 @@ ob_start();
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                          <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
+                        <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
                             <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
@@ -100,11 +102,8 @@ ob_start();
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
+                    include("../conexion.php");
+
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
@@ -121,7 +120,7 @@ ob_start();
           <form method="POST" action="#">
         <?php
 
-          $connection = new mysqli("localhost", "merino", "1234", "proyecto");
+        include("../conexion.php");
           $valor=$_GET ["idusuario"];
           $consulta="select * FROM usuarios where idusuario=$valor";
           $result=$connection->query($consulta);
@@ -212,11 +211,8 @@ ob_start();
           //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
 
           //Conexion con la base de datos
-          $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-          if ($connection->connect_errno) {
-                printf("Connection failed: %s\n", $connection->connect_error);
-                exit();
-            }
+          include("../conexion.php");
+
           $consulta="UPDATE usuarios SET Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos='$Apellidos',Cpostal=$CPostal,Telefono=$Telefono,Sexo='$Sexo',FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE idusuario=$idusu";
           if($result=$connection->query($consulta)){
             //header("Location: admin_usuarios.php");

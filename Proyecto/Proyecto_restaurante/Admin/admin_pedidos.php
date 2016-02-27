@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <?php
 //Crear variable de session
-session_start();
 ob_start();
+session_start();
 ?>
 <html>
   <head>
     <meta charset="UTF-8">
     <title></title>
     <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
-      <link href="../Css/login.css" rel="stylesheet" type="text/css">
+    <link href="../Css/menu.css" rel="stylesheet" type="text/css">
+    <link href="../Css/login.css" rel="stylesheet" type="text/css">
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -40,10 +41,10 @@ ob_start();
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
+                  <li><a href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li class="active"><a href="../admin/admin_usuarios.php">Productos</a></li>
-                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li class="active"><a href="../admin/admin_pedidos.php">Pedidos</a></li>
 
                     <ul style="float:right;list-style-type:none;">
 
@@ -63,7 +64,7 @@ ob_start();
                       if(empty($_GET["logout"])){
                       }else{
                         session_destroy();
-                        header("Location: ../admin/index.php");
+                        header("Location: ../index.php");
                       }
                     ?>
 
@@ -71,7 +72,7 @@ ob_start();
                       <div id="login" class="loginDialog">
                           <div>	<a href="#close" title="Close" class="close">X</a>
                                <h2><center>Login</center></h2>
-                               <form method="post" action="../admin/indexadmin.php">
+                               <form method="post" action="./index.php">
                                  <table class="table">
                                    <tr>
                                       <td><input type="text" id="user" name ="user" placeholder="Usuario"></td>
@@ -107,98 +108,85 @@ ob_start();
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
 
-  //UPDATE usuarios SET idusuario=,Username=,Password=,Email=,Actividad=,Tipo=,Dni_usuario=,Nombre=,Apellidos=,Cpostal=,Telefono=,Sexo=,FNacimiento=,Direccion WHERE 1
+                    if ($result = $connection->query($consulta)) {
+
+                          //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+                          if ($result->num_rows==0) {
+                            //echo "EL USUARIO NO EXISTE";
+                          } else {
+                              //Coge los datos devueltos por la consulta.
+                              while($fila=$result->fetch_object()){
+                                  $tipouser=$fila->Tipo;
+                                //Creamos la session
+                                $_SESSION["user"]=$user;
+                                $_SESSION["tipo"]=$tipouser;
+                              }
+                              //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
+                              if ($tipouser=="user"){
+                                  header("Location: ../index.php");
+
+                              }else{
+                                  header("Location: ../admin/indexadmin.php");
+                              }
+
+                          }
+
+                      } else {
+
+                      }
+
                 }
 
             ?>
 
 
-      <div id='slidercentral'>
-        <center>
-
-          <form method="POST" action="#">
+  <div id='slidercentral2' class="row" >
+              <!-- se cargaran tantos divs como productos haya en la base de datos -->
+    <div class="container" style="margin-botom:40px;margin-top:30px;">
+        <center><h3>PEDIDOS BAR MERI</h3>
+        <div id="tabla" class="container">
+        <table   style="margin-top:20px;text-align:center"   class="table">
+            <tr class="active">
+              <th style="text-align:center" >Usuario</th>
+              <th style="text-align:center" >Fecha Pedido</th>
+              <th style="text-align:center" >Importe total</th>
+            </tr>
         <?php
-
         include("../conexion.php");
-          $valor=$_GET ["IdProducto"];
-          $consulta="select * FROM producto where IdProducto=$valor";
-          $result=$connection->query($consulta);
-          $fila=$result->fetch_object();
 
-//SELECT `IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `imagen` FROM `producto` WHERE 1
-    echo'<table border=0>
+        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
+        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
 
-          <h2>Datos personales</h2>
+        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
+        $consulta="SELECT * FROM pedidos,usuarios WHERE pedidos.Usuario_idusuario=usuarios.idusuario";
 
-          <table border=0>
+        if ($result = $connection->query($consulta)) {
 
-            <tr>
-              <td>Tipo Producto:</td>
-              <td><input type="text" name="Tipo_producto" maxlength="40" size="70" placeholder="comida" value="'.$fila->Tipo_producto.'" required>
-              <input type="hidden" name="idproducto" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
-            </tr>
-
-            <tr>
-              <td>Nombre:</td>
-              <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Precio:</td>
-              <td><input type="number" name="Precio" step="any" min="0" placeholder="1.00€" value="'.$fila->Precio.'" required></td>
-            </tr>
-
-            <tr>
-              <td>Cantidad:</td>
-              <td><input type="number" name="Cantidad" step="any" min="0"  value="'.$fila->Cantidad.'" required></td>
-            </tr>
-
-            <tr>
-            <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
-            </tr>
-
-          </table>';
-
-          ?>
-          </form>
-          <?php
-
-          if(isset($_POST["Nombre"])){
-
-
-          $tipo=$_POST["Tipo_producto"];
-          $Nombre=$_POST["Nombre"];
-          $precio=$_POST["Precio"];
-          $Cantidad=$_POST["Cantidad"];
-          $idproducto=$_POST["idproducto"];
-          //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
-          //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
-
-          //Conexion con la base de datos
-          include("../conexion.php");
-
-          $consulta="UPDATE producto SET Tipo_producto='$tipo',Precio='$precio',Nombre='$Nombre',Cantidad='$Cantidad' WHERE IdProducto=$idproducto";
-          if($result=$connection->query($consulta)){
-            //header("Location: admin_usuarios.php");
-
-            //echo $consulta;
-            echo '<p><b>Consulta actualizada</b></p>';
-            header("Location: ../admin/admin_producto.php");
-
-
-          }else{
-            echo $connection->error;
-          }
+              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+              if ($result->num_rows==0) {
+                //echo "EL USUARIO NO EXISTE";
+              } else {
+                    while($fila=$result->fetch_object()){
+                        echo "<tr>
+                                <td>$fila->Username</td>
+                                <td>$fila->Fecha_pedido</td>
+                                <td>$fila->Coste_total</td>
+                              </tr>";
+                    }
+              }
+        }else{
+          echo $connection->error;
         }
-          ?>
 
-        </center>
+        ?>
+      </table> </center>
       </div>
+    </div>
+  </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
           </div>
 
-      </div>
     </body>
 </html>
