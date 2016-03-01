@@ -6,7 +6,7 @@
     if( $_SESSION["tipo"]=="admin"){
 
     }elseif($_SESSION["tipo"]=="user"){
-    
+
     }
   }else{
     header("Location: ../index.php");
@@ -246,10 +246,12 @@
             <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
             </tr>
 
+
           </table>';
 }
           ?>
           </form>
+
           <?php
 
           if(isset($_POST["Nombre"])){
@@ -284,6 +286,23 @@
             echo $connection->error;
           }
         }
+          ?>
+
+          <form class="" action="#" method="post">
+            <input type="submit" value="Darse de baja" id="baja" name="baja">
+          </form>
+
+          <?php
+          if(isset($_POST["baja"])){
+            include("../conexion.php");
+            $consulta="UPDATE usuarios SET Actividad='Inactivo' WHERE Username='".$_SESSION["user"]."'";
+            $connection->query($consulta);
+            echo $connection->error;
+            session_destroy();
+            header("Location: ../index.php");
+
+          }else{
+          }
           ?>
 
         </center>

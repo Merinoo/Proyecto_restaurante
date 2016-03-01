@@ -117,7 +117,7 @@
                     include("./conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
+                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."') and Actividad='Activo';";
 
                     if ($result = $connection->query($consulta)) {
 

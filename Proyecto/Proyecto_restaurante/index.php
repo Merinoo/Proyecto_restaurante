@@ -132,7 +132,7 @@
                     //Conexion con la base de datos
                     include("./conexion.php");
                     //Aqui p;onemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
+                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."') and Actividad='Activo';";
                     var_dump($consulta);
                     if ($result = $connection->query($consulta)) {
 

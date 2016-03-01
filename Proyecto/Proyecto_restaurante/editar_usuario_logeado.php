@@ -11,6 +11,7 @@
   }else{
     header("Location: index.php");
   }
+
 ?>
 <html>
   <head>
@@ -160,7 +161,7 @@
                 <td colspan="2"> <input type="submit" name="name" value="cambiar" style="float:right;"> </td>
               </tr>
             </table>
-          </form>
+
 
           <?php
             if(isset($_POST["apass"])){
@@ -309,6 +310,22 @@
         }
           ?>
 
+          <form class="" action="#" method="post">
+            <input type="submit" value="Darse de baja" id="baja" name="baja">
+          </form>
+
+          <?php
+          if(isset($_POST["baja"])){
+            include("conexion.php");
+            $consulta="UPDATE usuarios SET Actividad='Inactivo' WHERE Username='".$_SESSION["user"]."'";
+            $connection->query($consulta);
+            echo $connection->error;
+            session_destroy();
+            header("Location: index.php");
+
+          }else{
+          }
+          ?>
         </center>
       </div>
     </div>

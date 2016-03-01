@@ -191,7 +191,8 @@
                                 <td>$fila->Telefono</td>
                                 <td>
                                   <a href='../admin/editar_admin_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-warning'>Editar</button></a>
-                              </tr>";
+                                  <a href='../admin/admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-danger'>Borrar</button></a>
+                            </tr>";
                     }
               }
         }
