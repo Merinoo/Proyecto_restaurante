@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 
 <?php
-//Crear variable de session
-session_start();
-?>
+  ob_start();
+   session_start();
+  if(isset($_SESSION["tipo"])){
+    if( $_SESSION["tipo"]=="admin"){
+        header("Location: ./admin/indexadmin.php");
+    }elseif($_SESSION["tipo"]=="user"){
 
+    }
+  }else{
+
+  }
+?>
 <html>
   <head>
     <meta charset="UTF-8">

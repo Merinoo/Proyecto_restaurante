@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <?php
+  ob_start();
    session_start();
-  if( $_SESSION["tipo"]=="admin"){
-      header("Location: indexadmin.php");
+  if(isset($_SESSION["tipo"])){
+    if( $_SESSION["tipo"]=="admin"){
+        header("Location: ./admin/indexadmin.php");
+    }elseif($_SESSION["tipo"]=="user"){
+
+    }
+  }else{
+
   }
 ?>
 <html lang="en">

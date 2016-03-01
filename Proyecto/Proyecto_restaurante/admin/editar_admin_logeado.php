@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <?php
-//Crear variable de session
-session_start();
-ob_start();
+  ob_start();
+   session_start();
+  if(isset($_SESSION["tipo"])){
+    if( $_SESSION["tipo"]=="admin"){
+
+    }elseif($_SESSION["tipo"]=="user"){
+    
+    }
+  }else{
+    header("Location: ../index.php");
+  }
 ?>
 <html>
   <head>

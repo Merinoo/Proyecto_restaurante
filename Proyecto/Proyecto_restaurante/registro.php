@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<?php
+  ob_start();
+   session_start();
+  if(isset($_SESSION["tipo"])){
+    if( $_SESSION["tipo"]=="admin"){
+        header("Location: ./admin/indexadmin.php");
+    }elseif($_SESSION["tipo"]=="user"){
+
+    }
+  }else{
+  }
+?>
 <html lang="">
   <head>
     <meta charset="utf-8">

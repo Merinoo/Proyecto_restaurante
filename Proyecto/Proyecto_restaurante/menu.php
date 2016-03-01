@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 
 <?php
-//Crear variable de session
-session_start();
+  ob_start();
+   session_start();
+  if(isset($_SESSION["tipo"])){
+    if( $_SESSION["tipo"]=="admin"){
+        header("Location: ./admin/indexadmin.php");
+    }elseif($_SESSION["tipo"]=="user"){
+
+    }
+  }else{
+
+  }
 ?>
 
 <html>
@@ -38,7 +47,7 @@ session_start();
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
                         <li><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
-                          <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
+                          <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
                           <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
                             <?php
                             include("./conexion.php");
