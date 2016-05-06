@@ -4,20 +4,22 @@
    session_start();
   if(isset($_SESSION["tipo"])){
     if( $_SESSION["tipo"]=="admin"){
-        header("Location: ./admin/indexadmin.php");
-    }elseif($_SESSION["tipo"]=="user"){
 
+    }elseif($_SESSION["tipo"]=="user"){
+      header("Location: ../indexuser.php");
     }
   }else{
-    header("Location: index.php");
+    header("Location: ../index.php");
   }
 ?>
 <html>
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./Css/indexhtml.css" rel="stylesheet" type="text/css">
-      <link href="./Css/login.css" rel="stylesheet" type="text/css">
+    <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
+    <link href="../Css/menu.css" rel="stylesheet" type="text/css">
+
+      <link href="../Css/login.css" rel="stylesheet" type="text/css">
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -48,9 +50,11 @@
 
               <div id="menu">
                 <ul>
-                  <li><a href="./index.php">Inicio</a></li>
-                  <li><a href="./menu.php">Menú</a></li>
-                  <li><a href="./ubicacion.php">Ubicación</a></li>
+                  <li><a href="../admin/indexadmin.php">Inicio</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li class="active"><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -60,27 +64,8 @@
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                        <li class="active"><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
-                          <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
-                          <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
-                            <?php
-                            include("./conexion.php");
-
-                            $user=$_SESSION["user"];
-                            $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
-                            if($result = $connection->query($consulta)){
-                                  $total=0;
-                                  if($result->num_rows==0){
-                                  }else{
-                                      while($fila=$result->fetch_object()){
-                                          $total=$total+$fila->total;
-                                      }
-                                  }
-                                  echo " ($total)";
-                            }
-                             ?>
-                          </a></li>
-                            <li><a href="./index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
+                          <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
+                            <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -127,10 +112,10 @@
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    include("./conexion.php");
+                    include("../conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."') and Actividad='Activo';";
+                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
 
                     if ($result = $connection->query($consulta)) {
 
@@ -164,48 +149,42 @@
             ?>
 
 
+
+
       <div id='slidercentral' >
-        <center><h3>Pedidos de <?php echo $_SESSION["user"] ?></h3>
-        <div id="tabla" class="container">
+
         <table   style="margin-top:20px;text-align:center"   class="table">
             <tr class="active">
-              <th style="text-align:center" >Usuario</th>
-              <th style="text-align:center" >Fecha Pedido</th>
-              <th style="text-align:center" >Importe total</th>
-              <th style="text-align:center" >Detalles</th>
+              <th style="text-align:center" >Imagen</th>
+              <th style="text-align:center" >Nombre</th>
+              <th style="text-align:center" >Cantidad</th>
+              <th style="text-align:center" >Precio Unitario</th>
             </tr>
-        <?php
-        include("./conexion.php");
+            <?php
+            include("../conexion.php");
+              $consulta=$consulta = "SELECT producto.Imagen,producto.Nombre,detalle_pedido.Cantidad,producto.Precio FROM detalle_pedido, producto WHERE producto.IdProducto = detalle_pedido.Producto_IdProducto AND Pedidos_Num_pedido = ".$_GET["NPedido"].";";
+              if ($result = $connection->query($consulta)) {
 
-        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
-        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
-
-        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="SELECT * FROM pedidos,usuarios WHERE pedidos.Usuario_idusuario=usuarios.idusuario
-         AND usuarios.Username='".$_SESSION["user"]."'";
-
-        if ($result = $connection->query($consulta)) {
-
-              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
-              if ($result->num_rows==0) {
-                //echo "EL USUARIO NO EXISTE";
-              } else {
-                    while($fila=$result->fetch_object()){
-                        echo "<tr>
-                                <td>$fila->Username</td>
-                                <td>$fila->Fecha_pedido</td>
-                                <td>$fila->Coste_total</td>
-                                <td><a href='ver_detalles_pedido_user.php?NPedido=$fila->Num_pedido'>Ver Detalles</a></td>
-                              </tr>";
+                    //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+                    if ($result->num_rows==0) {
+                      //echo "EL USUARIO NO EXISTE";
+                    } else {
+                          while($fila=$result->fetch_object()){
+                              echo "<tr>
+                                      <td><img src='../Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
+                                      <td>$fila->Nombre</td>
+                                      <td>$fila->Cantidad</td>
+                                      <td>$fila->Precio</td>
+                                    </tr>";
+                          }
                     }
+              }else{
+                echo $connection->error;
               }
-        }else{
-          echo $connection->error;
-        }
-
-        ?>
-      </table> </center>
+            ?>
+          </table>
       </div>
+
     </div>
 
           <div id='pie'>

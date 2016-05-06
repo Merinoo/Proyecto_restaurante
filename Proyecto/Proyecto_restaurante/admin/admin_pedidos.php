@@ -158,6 +158,7 @@
               <th style="text-align:center" >Usuario</th>
               <th style="text-align:center" >Fecha Pedido</th>
               <th style="text-align:center" >Importe total</th>
+              <th style="text-align:center" >Detalles</th>
             </tr>
         <?php
         include("../conexion.php");
@@ -179,6 +180,7 @@
                                 <td>$fila->Username</td>
                                 <td>$fila->Fecha_pedido</td>
                                 <td>$fila->Coste_total</td>
+                                <td><a href='ver_detalles_pedido_admin.php?NPedido=$fila->Num_pedido'>Ver Detalles</a></td>
                               </tr>";
                     }
               }
