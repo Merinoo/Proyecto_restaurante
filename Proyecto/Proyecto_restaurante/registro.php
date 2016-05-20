@@ -67,12 +67,12 @@
 
         <tr>
           <td>Teléfono:</td>
-          <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" required></td><br>
+          <td><input type="number" name="Telefono" min="9" maxlength="9" size="18" placeholder="679210535" required></td><br>
         </tr>
 
         <tr>
           <td>C.Postal:</td>
-          <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" required></td>
+          <td><input type="number" name="CPostal" maxlength="5" size="18" placeholder="41900" required></td>
         </tr>
 
         <tr>
@@ -102,6 +102,7 @@
     <?php else: ?>
 
     <?php
+
 
     $Usuario=$_POST["Username"];
     $Password=$_POST["Password"];
