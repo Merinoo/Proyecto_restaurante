@@ -16,10 +16,23 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
     <link href="../Css/menu.css" rel="stylesheet" type="text/css">
 
       <link href="../Css/login.css" rel="stylesheet" type="text/css">
+
+      <?php
+        if(isset($_SESSION["tipo"])){
+          if($_SESSION["tema"]==1){
+            echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+          }elseif($_SESSION["tema"]==2){
+            echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
+          }elseif($_SESSION["tema"]==3){
+            echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
+          }
+        }else{
+          echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+        }
+      ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -39,7 +52,7 @@
 
   </head>
 
-    <body style="background-image:url('../logo/fondo.jpg')">
+    <body>
 
       <div id='global'>
           <div id='menucabecera'>
@@ -54,6 +67,8 @@
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
                   <li class="active"><a href="../admin/admin_producto.php">Productos</a></li>
                   <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
+
 
                     <ul style="float:right;list-style-type:none;">
 
@@ -162,7 +177,7 @@
             </tr>
             <?php
             include("../conexion.php");
-              $consulta=$consulta = "SELECT producto.Imagen,producto.Nombre,detalle_pedido.Cantidad,producto.Precio FROM detalle_pedido, producto WHERE producto.IdProducto = detalle_pedido.Producto_IdProducto AND Pedidos_Num_pedido = ".$_GET["NPedido"].";";
+              $consulta = "SELECT producto.Imagen,producto.Nombre,detalle_pedido.Cantidad,producto.Precio FROM detalle_pedido, producto WHERE producto.IdProducto = detalle_pedido.Producto_IdProducto AND Pedidos_Num_pedido = ".$_GET["NPedido"].";";
               if ($result = $connection->query($consulta)) {
 
                     //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else

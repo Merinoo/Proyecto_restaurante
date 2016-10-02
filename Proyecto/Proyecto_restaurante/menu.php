@@ -20,12 +20,27 @@
     <title></title>
     <link href="./Css/menu.css" rel="stylesheet" type="text/css">
     <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
+
+    <?php
+      if(isset($_SESSION["tipo"])){
+        if($_SESSION["tema"]==1){
+          echo '<link rel="stylesheet" href="./css/indexhtml.css">';
+        }elseif($_SESSION["tema"]==2){
+          echo '<link rel="stylesheet" href="./css/indexhtml2.css">';
+        }elseif($_SESSION["tema"]==3){
+          echo '<link rel="stylesheet" href="./css/indexhtml3.css">';
+        }
+      }else{
+        echo '<link rel="stylesheet" href="./css/indexhtml.css">';
+      }
+    ?>
+    
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   </head>
 
-    <body  style="background-image:url('./logo/fondo.jpg');">
+    <body>
 
       <div id='global'>
           <div id='menucabecera'>
@@ -34,8 +49,8 @@
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="./index.php">Inicio</a></li>
-                  <li><a href="./menu.php">Menú</a></li>
+                  <li><a href="./index.php">Inicio</a></li>
+                  <li class="active"><a href="./menu.php">Menú</a></li>
                   <li><a href="./ubicacion.php">Ubicación</a></li>
                     <ul style="float:right; list-style-type:none;">
 
@@ -127,10 +142,13 @@
                           } else {
                               //Coge los datos devueltos por la consulta.
                               while($fila=$result->fetch_object()){
-                                  $tipouser=$fila->Tipo;
-                                //Creamos la session
-                                $_SESSION["user"]=$user;
-                                $_SESSION["tipo"]=$tipouser;
+
+                              $tipouser=$fila->Tipo;
+                              $temauser=$fila->Tema;
+                              //Creamos la session
+                              $_SESSION["user"]=$user;
+                              $_SESSION["tipo"]=$tipouser;
+                              $_SESSION["tema"]=$temauser;
                               }
                               //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
                               if ($tipouser=="user"){

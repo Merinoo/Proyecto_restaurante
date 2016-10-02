@@ -52,7 +52,7 @@
 
         <tr>
           <td>Nombre:</td>
-          <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel" required></td>
+          <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Anton Manuel" required></td>
         </tr>
 
         <tr>
@@ -62,17 +62,17 @@
 
         <tr>
           <td>Direccion:</td>
-          <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" required></td>
+          <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Carambolo" required></td>
         </tr>
 
         <tr>
           <td>Teléfono:</td>
-          <td><input type="number" name="Telefono" min="9" maxlength="9" size="18" placeholder="679210535" required></td><br>
+          <td><input type="number" name="Telefono" min="9" maxlength="9" size="18" placeholder="679245789" required></td><br>
         </tr>
 
         <tr>
           <td>C.Postal:</td>
-          <td><input type="number" name="CPostal" maxlength="5" size="18" placeholder="41900" required></td>
+          <td><input type="number" name="CPostal" maxlength="5" size="18" placeholder="41789" required></td>
         </tr>
 
         <tr>
@@ -82,12 +82,12 @@
 
         <tr>
           <td>F.Nacimiento:</td>
-          <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" ></td>
+          <td><input type="date" name="FNacimiento" size="18" placeholder="1958-12-24" ></td>
         </tr>
 
         <tr>
           <td>Email:</td>
-          <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com" required></td>
+          <td><input type="text" name="Email" maxlength="35" size="18" placeholder="vodafone@gmail.com" required></td>
         </tr>
 
         <tr>
@@ -126,7 +126,7 @@
 
       //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
       if ($result->num_rows==0) {
-        $consulta="INSERT INTO usuarios VALUES (null,'$Usuario',md5('$Password'),'$Email','Activo','user','$DNI','$Nombre','$Apellidos',$CPostal,$Telefono,'$Sexo',$FNacimiento,'$Direccion')";
+        $consulta="INSERT INTO usuarios VALUES (null,'$Usuario',md5('$Password'),'$Email','Activo','user','$DNI','$Nombre','$Apellidos',$CPostal,$Telefono,'$Sexo',$FNacimiento,'$Direccion',1)";
 
        $connection->query($consulta);
        //var_dump($consulta);

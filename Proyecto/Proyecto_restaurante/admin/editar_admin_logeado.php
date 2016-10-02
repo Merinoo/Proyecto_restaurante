@@ -16,8 +16,21 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
       <link href="../Css/login.css" rel="stylesheet" type="text/css">
+
+      <?php
+        if(isset($_SESSION["tipo"])){
+          if($_SESSION["tema"]==1){
+            echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+          }elseif($_SESSION["tema"]==2){
+            echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
+          }elseif($_SESSION["tema"]==3){
+            echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
+          }
+        }else{
+          echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+        }
+      ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -37,7 +50,7 @@
 
   </head>
 
-    <body style="background-image:url('../logo/fondo.jpg')">
+    <body>
 
       <div id='global'>
           <div id='menucabecera'>
@@ -52,6 +65,8 @@
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
                   <li><a href="../admin/admin_usuarios.php">Productos</a></li>
                   <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
+
 
                     <ul style="float:right;list-style-type:none;">
 
@@ -243,6 +258,11 @@
             </tr>
 
             <tr>
+              <td>Tema:</td>
+              <td><input type="number" min="1" max="3" style="width:100%;" name="Tema" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="'.$fila->Tema.'" required></td>
+            </tr>
+
+            <tr>
             <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
             </tr>
 
@@ -266,6 +286,7 @@
           $Sexo=$_POST["Sexo"];
           $FNacimiento=$_POST["FNacimiento"];
           $Email=$_POST["Email"];
+          $Tema=$_POST["Tema"];
           $idusu=$_POST["idusu"];
           //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
           //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
@@ -273,10 +294,10 @@
           //Conexion con la base de datos
           include("../conexion.php");
 
-          $consulta="UPDATE usuarios SET Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos='$Apellidos',Cpostal=$CPostal,Telefono=$Telefono,Sexo='$Sexo',FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE idusuario=$idusu";
+          $consulta="UPDATE usuarios SET Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos='$Apellidos',Cpostal=$CPostal,Telefono=$Telefono,Sexo='$Sexo',FNacimiento='$FNacimiento',Direccion='$Direccion',Tema=$Tema WHERE idusuario=$idusu";
           if($result=$connection->query($consulta)){
             //header("Location: admin_usuarios.php");
-
+              $_SESSION["tema"]=$Tema;
             //echo $consulta;
             echo '<p><b>Consulta actualizada</b></p>';
             header("Location: ./indexadmin.php");

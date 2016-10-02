@@ -17,9 +17,22 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./Css/indexhtml.css" rel="stylesheet" type="text/css">
-    <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
+    <link href="./Css/login.css" rel="stylesheet" type="text/css">
 
+     <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
+    <?php
+      if(isset($_SESSION["tipo"])){
+        if($_SESSION["tema"]==1){
+          echo '<link rel="stylesheet" href="./css/indexhtml.css">';
+        }elseif($_SESSION["tema"]==2){
+          echo '<link rel="stylesheet" href="./css/indexhtml2.css">';
+        }elseif($_SESSION["tema"]==3){
+          echo '<link rel="stylesheet" href="./css/indexhtml3.css">';
+        }
+      }else{
+        echo '<link rel="stylesheet" href="./css/indexhtml.css">';
+      }
+    ?>
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -38,7 +51,7 @@
 
   </head>
 
-    <body style="background-image:url('./logo/fondo.jpg')">
+    <body>
 
       <div id='global'>
           <div id='menucabecera'>
@@ -146,9 +159,11 @@
 
                               while($fila=$result->fetch_object()){
                                   $tipouser=$fila->Tipo;
+                                  $temauser=$fila->Tema;
                                 //Creamos la session
                                 $_SESSION["user"]=$user;
                                 $_SESSION["tipo"]=$tipouser;
+                                $_SESSION["tema"]=$temauser;
                               }
                               //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
                               if ($tipouser=="user"){

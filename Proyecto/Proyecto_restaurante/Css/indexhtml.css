@@ -3,7 +3,8 @@ body{
   padding:0px;
   width:100%;
   height: 100%;
-}
+  background-image:url('../logo/fondo.jpg');
+ }
 
 div#global {
   margin:auto;

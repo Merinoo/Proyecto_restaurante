@@ -16,9 +16,22 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="../Css/indexhtml.css" rel="stylesheet" type="text/css">
     <link href="../Css/menu.css" rel="stylesheet" type="text/css">
     <link href="../Css/login.css" rel="stylesheet" type="text/css">
+
+    <?php
+      if(isset($_SESSION["tipo"])){
+        if($_SESSION["tema"]==1){
+          echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+        }elseif($_SESSION["tema"]==2){
+          echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
+        }elseif($_SESSION["tema"]==3){
+          echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
+        }
+      }else{
+        echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+      }
+    ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
@@ -38,7 +51,7 @@
 
   </head>
 
-    <body style="background-image:url('../logo/fondo.jpg')">
+    <body>
 
       <div id='global'>
           <div id='menucabecera'>
@@ -53,6 +66,8 @@
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
                   <li><a href="../admin/admin_usuarios.php">Productos</a></li>
                   <li class="active"><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
+
 
                     <ul style="float:right;list-style-type:none;">
 
@@ -153,6 +168,7 @@
     <div class="container" style="margin-botom:40px;margin-top:30px;">
         <center><h3>PEDIDOS BAR MERI</h3>
         <div id="tabla" class="container">
+        <a href='../admin/admin_pedidos_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
         <table   style="margin-top:20px;text-align:center"   class="table">
             <tr class="active">
               <th style="text-align:center" >Usuario</th>
@@ -180,7 +196,12 @@
                                 <td>$fila->Username</td>
                                 <td>$fila->Fecha_pedido</td>
                                 <td>$fila->Coste_total</td>
-                                <td><a href='ver_detalles_pedido_admin.php?NPedido=$fila->Num_pedido'>Ver Detalles</a></td>
+                                <td>
+                                  <a href='ver_detalles_pedido_admin.php?NPedido=$fila->Num_pedido'>Ver Detalles </a>
+                                  <a href='../admin/ver_detalles_pedidos_admin_pdf.php?NPedido=$fila->Num_pedido' style='margin-left:91.5%;float:right;'><button type='button' class='btn btn-danger'>Generar PDF</button></a>
+                                </td>
+
+
                               </tr>";
                     }
               }
