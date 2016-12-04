@@ -1,0 +1,89 @@
+body{
+  margin:0 auto;
+  padding:0px;
+  background-color:#2B3136;
+
+}
+
+div#global {
+  margin:auto;
+  margin-top:0px;
+  width:90%;
+  height:950px;
+  background-color:#2B3136;
+}
+
+div#menucabecera{
+    margin:0;
+    background-color:#1E2225;
+    height:8.7%;
+    position: relative;
+}
+
+div#logo{
+  float:left;
+  width:30%;
+  height:75%;
+  position: relative;
+  top:12%;
+  left:2.5%;
+  background-image:url('../logo/logo.png');
+  background-repeat: no-repeat;
+  background-size: 20% 95%;
+}
+
+div#menu{
+  float:right;
+  width:59%;
+}
+
+
+div#slidercentral{
+  margin:0 auto;
+  background-color:silver;
+  height:75%;
+  position: relative;
+
+}
+
+div#pie{
+  margin:0 auto;
+  text-align: center;
+  height:10%;
+  position: relative;
+  background-color:#1E2225;
+}
+
+/*Menu */
+
+div#menucabecera ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1E2225;
+    height:100%;
+}
+
+div#menucabecera li {
+    float: left;
+}
+
+div#menucabecera li a {
+    display: block;
+    color: white;
+    padding: 30px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-family: "Helvetica";
+}
+
+div#menucabecera li a:hover:not(.active) {
+    background-color: silver;
+    color: red;
+}
+
+div#menucabecera .active {
+    background-color: #4CAF50;
+}
+/*Fin de menu*/
