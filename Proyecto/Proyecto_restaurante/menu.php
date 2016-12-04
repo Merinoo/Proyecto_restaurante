@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <?php
   ob_start();
    session_start();
@@ -17,8 +18,8 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./css/contacto.css" rel="stylesheet" type="text/css">
-    <link href="./css/login.css" rel="stylesheet" type="text/css">
+    <link href="./css/menu.css" rel="stylesheet" type="text/css">
+    <link href="./css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
 
     <?php
       if(isset($_SESSION["tipo"])){
@@ -34,17 +35,15 @@
       }
     ?>
 
-     <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
   </head>
 
     <body>
 
       <div id='global'>
           <div id='menucabecera'>
-
               <div id="logo">
               </div>
 
@@ -62,15 +61,11 @@
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                          <li><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
+                        <li><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
                           <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
                           <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
                             <?php
-                            $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                            if ($connection->connect_errno) {
-                                  printf("Connection failed: %s\n", $connection->connect_error);
-                                  exit();
-                            }
+                            include("./conexion.php");
 
                             $user=$_SESSION["user"];
                             $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
@@ -86,7 +81,7 @@
                             }
                              ?>
                           </a></li>
-                          <li><a href="ver_detalles_prod.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
+                          <li><a href="index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -134,11 +129,7 @@
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    $connection = new mysqli("localhost", "merino", "1234", "proyecto");
-                    if ($connection->connect_errno) {
-                          printf("Connection failed: %s\n", $connection->connect_error);
-                          exit();
-                      }
+                    include("./conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."') and Actividad='Activo';";
@@ -151,12 +142,13 @@
                           } else {
                               //Coge los datos devueltos por la consulta.
                               while($fila=$result->fetch_object()){
-                                $tipouser=$fila->Tipo;
-                                $temauser=$fila->Tema;
-                                //Creamos la session
-                                $_SESSION["user"]=$user;
-                                $_SESSION["tipo"]=$tipouser;
-                                $_SESSION["tema"]=$temauser;
+
+                              $tipouser=$fila->Tipo;
+                              $temauser=$fila->Tema;
+                              //Creamos la session
+                              $_SESSION["user"]=$user;
+                              $_SESSION["tipo"]=$tipouser;
+                              $_SESSION["tema"]=$temauser;
                               }
                               //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
                               if ($tipouser=="user"){
@@ -176,95 +168,72 @@
 
             ?>
 
+            <div id='submenucabecera2'>
+                <div id="submenu">
+                  <ul>
+                      <li class="">
+                        <img src="./Imagenes_menu/bebidas.jpg"/>
+                        <a href="./menu.php?tipo=Bebidas">Bebidas</a>
+                      </li>
 
-          <div id='slidercentral' >
-              <div class="" style="position:relative;width:80%;height:40px;border:solid black 1px;top:30px;margin:0 auto;">
-                <h2 style="position:relative;font-family:sans-serif;top:-10px">DETALLES DEL PRODUCTO</h2>
+                      <li class="color_submenu2">
+                        <img src="./Imagenes_menu/comidas.jpg"/>
+                        <a href="./menu.php?tipo=Comida">Comidas</a>
+                      </li>
+
+                      <li class="color_submenu3">
+                        <img src="./Imagenes_menu/postres.jpg"/>
+                        <a href="./menu.php?tipo=Postres">Postres</a>
+                      </li>
+
+                      <li class="color_submenu4">
+                        <img src="./Imagenes_menu/complementos.jpg"/>
+                        <a href="./menu.php?tipo=Complementos">Complementos</a>
+                      </li>
+                  </ul>
+                </div>
               </div>
-              <div class="" style="position:relative;width:80%;height:300px;top:40px;margin:0 auto;">
-                  <div class="" style="float:left;border:solid black 1px;width:40%;height:100%;">
 
-                    <?php
-                    include("./conexion.php");
+          <div id='slidercentral2' class="row" >
+            <!-- se cargaran tantos divs como productos haya en la base de datos -->
+            <div class="container" style="margin-botom:40px;margin-top:30px;">
 
-                    $consulta="select * from producto where IdProducto='".$_GET["codigoprod"]."';";
-                    if($result=$connection->query($consulta)){
-                      while ($fila=$result->fetch_object()) {
-                          echo '<img src="./Imagenes_menu/'.$fila->Imagen.'" style="width:100%;height:100%;" alt="" />';
+            <?php
+            //Conexion con la base de datos
+            include("./conexion.php");
+
+            //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
+            $consulta="select * from producto ";
+            if(isset($_GET["tipo"])){
+              if($_GET["tipo"]=="Comida" || $_GET["tipo"]=="Bebidas" || $_GET["tipo"]=="Postres" || $_GET["tipo"]=="Complementos" ){
+                $consulta=$consulta . " WHERE Tipo_producto='".$_GET['tipo']."'";
+              }
+            }
+
+            if ($result = $connection->query($consulta)) {
+
+                  //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+                  if ($result->num_rows==0) {
+                    //echo "EL USUARIO NO EXISTE";
+                  } else {
+                      //Coge los datos devueltos por la consulta.
+                      while($fila=$result->fetch_object()){
+                          echo '<div style="border:solid black 1px;width:18%;margin-right:1.5%;height:280px;float:left;padding:5px 0px;margin-bottom:10px">
+                          <img src="./Imagenes_menu/'.$fila->Imagen.'" style="width:70%;height:80%;margin-left:15%">
+                          <center><a style="text-decoration:none;font-weight:bold;" href="./ver_detalles_prod.php?codigoprod='.$fila->IdProducto.'"><h3 style="margin-top:0px">'.$fila->Nombre.'</h3></a></center>
+                        </div>';
                       }
-                    }
-                     ?>
-                  </div>
-                  <div style="float:right;border:solid black 1px;width:55%;height:100%;">
-                    <table>
-                      <?php
-                      include("./conexion.php");
-
-                        $consulta="select * from producto where IdProducto='".$_GET["codigoprod"]."';";
-                        if($result=$connection->query($consulta)){
-                          while ($fila=$result->fetch_object()) {
-                              echo '<tr>
-                                      <td>Tipo: </td>
-                                      <td>'.$fila->Tipo_producto.'</td>
-                                    </tr>
-                                    <tr>
-                                      <td>Nombre: </td>
-                                      <td>'.$fila->Nombre.'</td>
-                                    </tr>
-                                    <tr>
-                                      <td>Precio: </td>
-                                      <td>'.$fila->Precio.'€</td>
-                                    </tr>
-                                    <tr>
-                                      <td>Cantidad: </td>
-                                      <td>'.$fila->Cantidad.'</td>
-                                    </tr>';
-                              if(isset($_SESSION["tipo"])){
-                                    echo '<tr>
-                                            <td>
-                                                <form class="" action="#" method="post">
-                                                  <input type="hidden" name="idproducto" value="'.$fila->IdProducto.'">
-                                                  <input type="submit" name="añadircarrito" value="Añadir al carrito">
-                                                </form>
-                                            </td>
-                                          </tr>';
-                              }
-
-                          }
-                        }
-                       ?>
-                    </table>
-                    <?php
-                    if(isset($_POST["idproducto"])){
-                      $idproducto=$_POST["idproducto"];
-
-                      include("./conexion.php");
-
-                      $consultaUser="SELECT idusuario FROM usuarios WHERE Username='".$_SESSION["user"]."'";
-                      $result=$connection->query($consultaUser);
-                      $fila=$result->fetch_object();
-
-                      $idUsuarioLogeado=$fila->idusuario;
-
-                      $consulta = "SELECT * FROM cesta,producto WHERE cesta.Producto_IdProducto = producto.IdProducto AND cesta.Usuarios_idusuario = $idUsuarioLogeado AND cesta.Producto_IdProducto = $idproducto";
-                      if($result = $connection->query($consulta)){
-                          if($result->num_rows==0){
-                            $consultaInsertarCesta = "INSERT INTO cesta VALUES(".$idUsuarioLogeado.",".$idproducto.",1)";
-                            $connection->query($consultaInsertarCesta);
-                            header("Location: ./ver_detalles_prod.php?codigoprod=".$idproducto);
-                          }else{
-                            $consultaActualizarProductoCesta = "UPDATE cesta SET Cantidad = (Cantidad + 1) WHERE Producto_IdProducto = $idproducto AND Usuarios_idusuario = $idUsuarioLogeado";
-                            $connection->query($consultaActualizarProductoCesta);
-                            header("Location: ./ver_detalles_prod.php?codigoprod=".$idproducto);
-                          }
-                        }
-                    }
 
 
-                     ?>
-                  </div>
-              </div>
+                  }
 
+              } else {
+
+              }
+
+
+            ?>
+            </div>
           </div>
 
           <div id='pie'>

@@ -4,39 +4,39 @@
    session_start();
   if(isset($_SESSION["tipo"])){
     if( $_SESSION["tipo"]=="admin"){
-        header("Location: ./admin/indexadmin.php");
-    }elseif($_SESSION["tipo"]=="user"){
 
+    }elseif($_SESSION["tipo"]=="user"){
+      header("Location: ../indexuser.php");
     }
   }else{
-    header("Location: index.php");
+    header("Location: ../index.php");
   }
 ?>
 <html>
   <head>
     <meta charset="UTF-8">
     <title></title>
-      <link href="./css/login.css" rel="stylesheet" type="text/css">
+    <link href="../css/menu.css" rel="stylesheet" type="text/css">
+      <link href="../Css/login.css" rel="stylesheet" type="text/css">
 
       <?php
         if(isset($_SESSION["tipo"])){
           if($_SESSION["tema"]==1){
-            echo '<link rel="stylesheet" href="./css/indexhtml.css">';
+            echo '<link rel="stylesheet" href="../css/indexhtml.css">';
           }elseif($_SESSION["tema"]==2){
-            echo '<link rel="stylesheet" href="./css/indexhtml2.css">';
+            echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
           }elseif($_SESSION["tema"]==3){
-            echo '<link rel="stylesheet" href="./css/indexhtml3.css">';
+            echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
           }
         }else{
-          echo '<link rel="stylesheet" href="./css/indexhtml.css">';
+          echo '<link rel="stylesheet" href="../css/indexhtml.css">';
         }
       ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -61,9 +61,13 @@
 
               <div id="menu">
                 <ul>
-                  <li><a href="./index.php">Inicio</a></li>
-                  <li><a href="./menu.php">Menú</a></li>
-                  <li><a href="./ubicacion.php">Ubicación</a></li>
+                  <li><a href="../admin/indexadmin.php">Inicio</a></li>
+                  <li class="active"><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
+
+
                     <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
@@ -73,27 +77,8 @@
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                        <li class="active"><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
-                          <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
-                          <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
-                            <?php
-                            include("./conexion.php");
-
-                            $user=$_SESSION["user"];
-                            $consulta = "SELECT SUM(cesta.Cantidad) AS total FROM usuarios, cesta WHERE usuarios.idusuario = cesta.Usuarios_idusuario AND usuarios.Username = '".$user."';";
-                            if($result = $connection->query($consulta)){
-                                  $total=0;
-                                  if($result->num_rows==0){
-                                  }else{
-                                      while($fila=$result->fetch_object()){
-                                          $total=$total+$fila->total;
-                                      }
-                                  }
-                                  echo " ($total)";
-                            }
-                             ?>
-                          </a></li>
-                            <li><a href="./index.php?logout=yes"><img id="cerrar_sesion" src="./logo/logout.png" /></a></li>
+                        <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
+                            <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -140,10 +125,10 @@
                     $tipouser="";
 
                     //Conexion con la base de datos
-                    include("./conexion.php");
+                    include("../conexion.php");
 
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."') and Actividad='Activo';";
+                    $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
 
                     if ($result = $connection->query($consulta)) {
 
@@ -153,13 +138,10 @@
                           } else {
                               //Coge los datos devueltos por la consulta.
                               while($fila=$result->fetch_object()){
-
-                                $tipouser=$fila->Tipo;
-                                $temauser=$fila->Tema;
+                                  $tipouser=$fila->Tipo;
                                 //Creamos la session
                                 $_SESSION["user"]=$user;
                                 $_SESSION["tipo"]=$tipouser;
-                                $_SESSION["tema"]=$temauser;
                               }
                               //Si el tipo de usuario es administrador lo manda a indexadmin.php y si es usuario corriente lo manda indexuser.php .
                               if ($tipouser=="user"){
@@ -180,25 +162,32 @@
             ?>
 
 
-      <div id='slidercentral' >
-        <center><h3>Pedidos de <?php echo $_SESSION["user"] ?></h3>
+  <div id='slidercentral2' class="row" >
+              <!-- se cargaran tantos divs como productos haya en la base de datos -->
+  <div class="container" style="margin-botom:40px;margin-top:30px;">
+        <center><H3>TABLA DE USUARIOS</H3> </center>
+        <a href='../admin/anadir_admin_usuario.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-success'>Añadir</button></a>
+        <a href='../admin/admin_usuarios_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
         <div id="tabla" class="container">
-        <table   style="margin-top:20px;text-align:center"   class="table">
+        <table   style="margin-top:20px"  class="table">
             <tr class="active">
-              <th style="text-align:center" >Usuario</th>
-              <th style="text-align:center" >Fecha Pedido</th>
-              <th style="text-align:center" >Importe total</th>
-              <th style="text-align:center" >Detalles</th>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Tipo</th>
+              <th>DNI</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              <th>Telefono</th>
+              <th>Operaciones</th>
             </tr>
         <?php
-        include("./conexion.php");
+        include("../conexion.php");
 
         //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
         // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
 
         //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="SELECT * FROM pedidos,usuarios WHERE pedidos.Usuario_idusuario=usuarios.idusuario
-         AND usuarios.Username='".$_SESSION["user"]."'";
+        $consulta="select * from usuarios";
 
         if ($result = $connection->query($consulta)) {
 
@@ -209,27 +198,35 @@
                     while($fila=$result->fetch_object()){
                         echo "<tr>
                                 <td>$fila->Username</td>
-                                <td>$fila->Fecha_pedido</td>
-                                <td>$fila->Coste_total</td>
+                                <td>$fila->Email</td>
+                                <td>$fila->Tipo</td>
+                                <td>$fila->Dni_usuario</td>
+                                <td>$fila->Nombre</td>
+                                <td>$fila->Apellidos</td>
+                                <td>$fila->Telefono</td>
                                 <td>
-                                <a href='ver_detalles_pedido_user.php?NPedido=$fila->Num_pedido'>Ver Detalles</a>
-                                <a href='ver_detalles_pedido_user_pdf.php?NPedido=$fila->Num_pedido' style='margin-left:91.5%;float:right;'><button type='button' class='btn btn-danger'>Generar PDF</button></a>
-                                </td>
-                              </tr>";
+                                  <a href='../admin/editar_admin_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-warning'>Editar</button></a>
+                                  <a href='../admin/admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-danger'>Borrar</button></a>
+                            </tr>";
                     }
               }
-        }else{
-          echo $connection->error;
         }
 
+
+
+
+
+
         ?>
-      </table> </center>
-      </div>
+      </table>
     </div>
+  </div>
+      </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
           </div>
 
+      </div>
     </body>
 </html>

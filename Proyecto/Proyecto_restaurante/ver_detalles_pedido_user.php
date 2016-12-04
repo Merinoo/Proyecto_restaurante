@@ -34,9 +34,9 @@
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
 
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -73,9 +73,9 @@
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                          <li><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
+                        <li class="active"><a href="./pedidos_usuario_logeado.php">Mis pedidos</a></li>
                           <li><a href="./editar_usuario_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
-                          <li class="active"><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
+                          <li><a href="./ver_cesta.php"><span class="glyphicon glyphicon-shopping-cart"></span>
                             <?php
                             include("./conexion.php");
 
@@ -179,133 +179,45 @@
             ?>
 
 
-      <div id='slidercentral' style="border:solid red 1px">
-        <center><H2>Cesta de <?php echo $_SESSION["user"] ?></H2> </center>
-        <div id="tabla" class="container">
-          <a href='./ver_cesta.php?hacerpedido=yes' ><button style="float:right;margin-bottom:10px;" type='button' class='btn btn-success'>Realizar pedido</button></a>
+      <div id='slidercentral' >
 
-          <?php
-              if(isset($_GET["hacerpedido"])){
-                include("./conexion.php");
-
-                $consultaRecuperarIdUsuario="SELECT idusuario FROM usuarios WHERE Username='".$_SESSION["user"]."'";
-                $result= $connection->query($consultaRecuperarIdUsuario);
-                $fila=$result->fetch_object();
-
-                $idusuario=$fila->idusuario;
-
-                $consultaRecogerCestaUsuario="SELECT cesta.Cantidad, producto.Precio,producto.IdProducto,cesta.Producto_IdProducto
-                 FROM cesta,producto
-                 WHERE cesta.Producto_IdProducto=producto.IdProducto AND cesta.Usuarios_idusuario='".$idusuario."'";
-
-                if($result2=$connection->query($consultaRecogerCestaUsuario)){
-                  if($result2->num_rows==0){
-                    echo "No hay productos en la cesta para realizar el pedido";
-                  }else{
-                    $consultaPedido="INSERT INTO `pedidos`(`Usuario_idusuario`, `Fecha_pedido`,`Coste_total`) VALUES ($idusuario,CURRENT_TIMESTAMP(),0)";
-                    $result= $connection->query($consultaPedido);
-
-                    $consultaRecuperarMaxIdPedido="SELECT * FROM pedidos ORDER BY Num_pedido DESC LIMIT 1;";
-                    $result3= $connection->query($consultaRecuperarMaxIdPedido);
-
-                    $idNuevoPedido=0;
-                    while($f=$result3->fetch_object()){
-                      $idNuevoPedido=$f->Num_pedido;
-                    }
-
-                    echo $idNuevoPedido;
-                    $precioTotalPedido=0;
-
-                    while($fila=$result2->fetch_object()){
-                      $consultaInsertDetallesLineaPedido="INSERT INTO `detalle_pedido`(`Cantidad`, `Pedidos_Num_pedido`, `Producto_IdProducto`)
-                       VALUES (".$fila->Cantidad.",$idNuevoPedido,".$fila->Producto_IdProducto.")";
-                      $connection->query($consultaInsertDetallesLineaPedido);
-                      $cant=$fila->Cantidad;
-                      $precio=$fila->Precio;
-                      $precioTotalPedido= $precioTotalPedido +($cant*$precio);
-
-                    }
-
-                    $connection->query("UPDATE pedidos SET Coste_total = $precioTotalPedido WHERE Num_pedido=$idNuevoPedido");
-                    $connection->query("DELETE FROM cesta WHERE Usuarios_idusuario=$idusuario");
-                    header("Location: ./pedidos_usuario_logeado.php");
-
-                  }
-                }else{
-                  echo $connection->error;
-                }
-
-
-              }
-          ?>
-        <table   style="margin-top:20px;text-align:center"  class="table">
+        <table   style="margin-top:20px;text-align:center"   class="table">
             <tr class="active">
-              <th style="text-align:center;">Imagen</th>
-              <th style="text-align:center;">Producto</th>
-              <th style="text-align:center;">Precio</th>
-              <th style="text-align:center;">Cantidad</th>
-              <th style="text-align:center;">Operaciones</th>
-
+              <th style="text-align:center" >Imagen</th>
+              <th style="text-align:center" >Nombre</th>
+              <th style="text-align:center" >Cantidad</th>
+              <th style="text-align:center" >Precio Unitario</th>
             </tr>
-
-        <?php
-        include("./conexion.php");
-
-        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
-        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
-
-        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="SELECT producto.Imagen,producto.Nombre,producto.Precio,cesta.Cantidad,producto.IdProducto FROM cesta,usuarios,producto WHERE producto.IdProducto=cesta.Producto_IdProducto AND cesta.Usuarios_idusuario=usuarios.idusuario AND usuarios.Username='".$_SESSION["user"]."'";
-
-        if ($result = $connection->query($consulta)) {
-              if ($result->num_rows==0) {
-                //echo "EL USUARIO NO EXISTE";
-              } else {
-                    while($fila=$result->fetch_object()){
-                        echo "<tr>
-                                <td><img src='./Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
-                                <td>$fila->Nombre</td>
-                                <td>$fila->Precio</td>
-                                <td>$fila->Cantidad</td>
-                                <td>
-                                  <a href='./ver_cesta.php?codproducto=".$fila->IdProducto."'><button type='button' class='btn btn-danger'>Borrar</button></a>
-                                </td>
-                              </tr>";
-                    }
-              }
-        }else{
-          echo $connection->error;
-        }
-        ?>
-      </table>
-      <?php
-          if(isset($_GET["codproducto"])){
-            $idproducto=$_GET["codproducto"];
-
+            <?php
             include("./conexion.php");
+              $consulta=$consulta = "SELECT producto.Imagen,producto.Nombre,detalle_pedido.Cantidad,producto.Precio FROM detalle_pedido, producto WHERE producto.IdProducto = detalle_pedido.Producto_IdProducto AND Pedidos_Num_pedido = ".$_GET["NPedido"].";";
+              if ($result = $connection->query($consulta)) {
 
-            $consultaRecuperarIdUsuario="SELECT idusuario FROM usuarios WHERE Username='".$_SESSION["user"]."'";
-            $result= $connection->query($consultaRecuperarIdUsuario);
-            $fila=$result->fetch_object();
-
-            $idusuario=$fila->idusuario;
-
-            $consultaBorrarCesta="DELETE FROM cesta WHERE Producto_IdProducto=$idproducto
-            AND Usuarios_idusuario=$idusuario";
-
-            $connection->query($consultaBorrarCesta);
-            echo  $connection->error;
-            echo  $consultaBorrarCesta;
-            header("Location: ./ver_cesta.php");
-          }
-       ?>
-    </div>
+                    //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+                    if ($result->num_rows==0) {
+                      //echo "EL USUARIO NO EXISTE";
+                    } else {
+                          while($fila=$result->fetch_object()){
+                              echo "<tr>
+                                      <td><img src='./Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
+                                      <td>$fila->Nombre</td>
+                                      <td>$fila->Cantidad</td>
+                                      <td>$fila->Precio</td>
+                                    </tr>";
+                          }
+                    }
+              }else{
+                echo $connection->error;
+              }
+            ?>
+          </table>
       </div>
+
+    </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
           </div>
 
-      </div>
     </body>
 </html>

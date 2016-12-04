@@ -35,10 +35,9 @@
       ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -164,70 +163,47 @@
             ?>
 
 
-            <div id='slidercentral2' class="row" >
-              <!-- se cargaran tantos divs como productos haya en la base de datos -->
-              <div class="container" style="margin-botom:40px;margin-top:30px;">
-        <center><H3>TABLA DE PRODUCTOS</H3> </center>
-        <a href='../admin/anadir_admin_producto.php' style="margin-left:91.5%"><button type='button' class='btn btn-success'>Añadir</button></a>
-        <a href='../admin/admin_productos_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
-        <div id="tabla" class="container">
-        <table   style="margin-top:20px"  class="table">
+
+
+      <div id='slidercentral' >
+
+        <table   style="margin-top:20px;text-align:center"   class="table">
             <tr class="active">
-              <th>IdProducto</th>
-              <th>Tipo producto</th>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Imagen</th>
-              <th>Operaciones</th>
-
+              <th style="text-align:center" >Imagen</th>
+              <th style="text-align:center" >Nombre</th>
+              <th style="text-align:center" >Cantidad</th>
+              <th style="text-align:center" >Precio Unitario</th>
             </tr>
-        <?php
-        include("../conexion.php");
+            <?php
+            include("../conexion.php");
+              $consulta = "SELECT producto.Imagen,producto.Nombre,detalle_pedido.Cantidad,producto.Precio FROM detalle_pedido, producto WHERE producto.IdProducto = detalle_pedido.Producto_IdProducto AND Pedidos_Num_pedido = ".$_GET["NPedido"].";";
+              if ($result = $connection->query($consulta)) {
 
-        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
-        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
-
-        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="SELECT * FROM `producto`";
-
-        if ($result = $connection->query($consulta)) {
-
-              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
-              if ($result->num_rows==0) {
-                //echo "EL USUARIO NO EXISTE";
-              } else {
-                    while($fila=$result->fetch_object()){
-                        echo "<tr>
-                                <td>$fila->IdProducto</td>
-                                <td>$fila->Tipo_producto</td>
-                                <td>$fila->Nombre</td>
-                                <td>$fila->Precio</td>
-                                <td>$fila->Cantidad</td>
-                                <td><img src='../Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
-                                <td>
-                                  <a href='../admin/editar_admin_producto.php?IdProducto=".$fila->IdProducto."'><button type='button' class='btn btn-warning'>Editar</button></a>
-                                  <a href='../admin/admin_borrar_producto.php?IdProducto=".$fila->IdProducto."'><button type='button' class='btn btn-danger'>Borrar</button></a>
-                              </tr>";
+                    //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+                    if ($result->num_rows==0) {
+                      //echo "EL USUARIO NO EXISTE";
+                    } else {
+                          while($fila=$result->fetch_object()){
+                              echo "<tr>
+                                      <td><img src='../Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
+                                      <td>$fila->Nombre</td>
+                                      <td>$fila->Cantidad</td>
+                                      <td>$fila->Precio</td>
+                                    </tr>";
+                          }
                     }
+              }else{
+                echo $connection->error;
               }
-        }
-
-
-
-
-
-
-        ?>
-      </table>
-    </div>
-  </div>
+            ?>
+          </table>
       </div>
+
+    </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
           </div>
 
-      </div>
     </body>
 </html>

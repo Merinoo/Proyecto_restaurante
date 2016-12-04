@@ -16,6 +16,7 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
+
       <link href="../css/login.css" rel="stylesheet" type="text/css">
 
       <?php
@@ -33,10 +34,9 @@
       ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -61,9 +61,9 @@
 
               <div id="menu">
                 <ul>
-                  <li><a href="../admin/indexadmin.php">Inicio</a></li>
-                  <li class="active"><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li class="active"><a href="../admin/admin_usuarios.php">Productos</a></li>
                   <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
                   <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
 
@@ -140,106 +140,73 @@
         <center>
 
           <form method="POST" action="#">
-            <table border=0>
+        <?php
 
-                  <h2>Añade tu Usuario</h2>
+        include("../conexion.php");
+          $valor=$_GET ["IdProducto"];
+          $consulta="select * FROM producto where IdProducto=$valor";
+          $result=$connection->query($consulta);
+          $fila=$result->fetch_object();
 
-                  <table border=0>
-                    <tr>
-                      <td>Usuario:</td>
-                      <td><input type="text" name="Username" maxlength="25" size="18" placeholder="merino"  required></td>
-                    </tr>
+//SELECT `IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `imagen` FROM `producto` WHERE 1
+    echo'<table border=0>
 
-                    <tr>
-                      <td>Contraseña:</td>
-                      <td><input type="password" name="Password" maxlength="15"size="18" placeholder="*****" required></td>
-                    </tr>
-                      <tr>
-                        <td>DNI:</td>
-                        <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="" required>
-                        <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="" required></td><br>
-                      </tr>
+          <h2>Datos personales</h2>
 
-                      <tr>
-                        <td>Nombre:</td>
-                        <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="" required></td>
-                      </tr>
+          <table border=0>
 
-                      <tr>
-                        <td>Apellidos:</td>
-                        <td><input type="text" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="" required></td>
-                      </tr>
+            <tr>
+              <td>Tipo Producto:</td>
+              <td><input type="text" name="Tipo_producto" maxlength="40" size="70" placeholder="comida" value="'.$fila->Tipo_producto.'" required>
+              <input type="hidden" name="idproducto" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
+            </tr>
 
-                      <tr>
-                        <td>Direccion:</td>
-                        <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="" required></td>
-                      </tr>
+            <tr>
+              <td>Nombre:</td>
+              <td><input type="text" name="Nombre" maxlength="25" size="18" placeholder="Antonio Manuel"  value="'.$fila->Nombre.'" required></td>
+            </tr>
 
-                      <tr>
-                        <td>Teléfono:</td>
-                        <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="" required></td><br>
-                      </tr>
+            <tr>
+              <td>Precio:</td>
+              <td><input type="number" name="Precio" step="any" min="0" placeholder="1.00€" value="'.$fila->Precio.'" required></td>
+            </tr>
 
-                      <tr>
-                        <td>C.Postal:</td>
-                        <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" value="" required></td>
-                      </tr>
+            <tr>
+              <td>Cantidad:</td>
+              <td><input type="number" name="Cantidad" step="any" min="0"  value="'.$fila->Cantidad.'" required></td>
+            </tr>
 
-                      <tr>
-                        <td>Sexo:</td>
-                            <td><input type="radio" name="Sexo" value="Hombre" checked>Hombre<Input type="radio" name="Sexo" value="Mujer">Mujer </td>
-                      </tr>
+            <tr>
+            <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
+            </tr>
 
-                      <tr>
-                        <td>F.Nacimiento:</td>
-                        <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" value="" ></td>
-                      </tr>
+          </table>';
 
-                      <tr>
-                        <td>Email:</td>
-                        <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="" required></td>
-                      </tr>
-
-                      <tr>
-                      <td colspan="2" align="right"><input type="submit" value="Enviar"></td>
-                      </tr>
-
-                    </table>
-
-
-                  </form>
+          ?>
+          </form>
           <?php
 
           if(isset($_POST["Nombre"])){
 
-            $Usuario=$_POST["Username"];
-            $Password=$_POST["Password"];
 
-            $idusu=$_POST["Idusuario"];
-            $DNI=$_POST["Dni_usuario"];
-            $Nombre=$_POST["Nombre"];
-            $Apellidos=$_POST["Apellidos"];
-            $Direccion=$_POST["Direccion"];
-            $Telefono=$_POST["Telefono"];
-            $CPostal=$_POST["CPostal"];
-            $Sexo=$_POST["Sexo"];
-            $FNacimiento=$_POST["FNacimiento"];
-            $Email=$_POST["Email"];
-
-
-
-
+          $tipo=$_POST["Tipo_producto"];
+          $Nombre=$_POST["Nombre"];
+          $precio=$_POST["Precio"];
+          $Cantidad=$_POST["Cantidad"];
+          $idproducto=$_POST["idproducto"];
           //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
           //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
 
           //Conexion con la base de datos
           include("../conexion.php");
 
-          //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
-          $consulta="INSERT INTO usuarios VALUES (null,'$Usuario',md5('$Password'),'$Email','Activo','user','$DNI','$Nombre','$Apellidos',$CPostal,$Telefono,'$Sexo',$FNacimiento,'$Direccion')";
-
+          $consulta="UPDATE producto SET Tipo_producto='$tipo',Precio='$precio',Nombre='$Nombre',Cantidad='$Cantidad' WHERE IdProducto=$idproducto";
           if($result=$connection->query($consulta)){
-            header("Location: ../admin/admin_usuarios.php");
+            //header("Location: admin_usuarios.php");
+
+            //echo $consulta;
+            echo '<p><b>Consulta actualizada</b></p>';
+            header("Location: ../admin/admin_producto.php");
 
 
           }else{

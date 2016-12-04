@@ -17,27 +17,27 @@
     <meta charset="UTF-8">
     <title></title>
     <link href="../css/menu.css" rel="stylesheet" type="text/css">
-    <link href="../css/login.css" rel="stylesheet" type="text/css">
 
-    <?php
-      if(isset($_SESSION["tipo"])){
-        if($_SESSION["tema"]==1){
+      <link href="../css/login.css" rel="stylesheet" type="text/css">
+
+      <?php
+        if(isset($_SESSION["tipo"])){
+          if($_SESSION["tema"]==1){
+            echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+          }elseif($_SESSION["tema"]==2){
+            echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
+          }elseif($_SESSION["tema"]==3){
+            echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
+          }
+        }else{
           echo '<link rel="stylesheet" href="../css/indexhtml.css">';
-        }elseif($_SESSION["tema"]==2){
-          echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
-        }elseif($_SESSION["tema"]==3){
-          echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
         }
-      }else{
-        echo '<link rel="stylesheet" href="../css/indexhtml.css">';
-      }
-    ?>
+      ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -64,8 +64,8 @@
                 <ul>
                   <li><a href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
-                  <li class="active"><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li class="active"><a href="../admin/admin_producto.php">Productos</a></li>
+                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
                   <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
 
 
@@ -78,7 +78,7 @@
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                        <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
+                          <li><a href="#"><?php echo $_SESSION["user"]; ?></a></li>
                             <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
@@ -163,18 +163,23 @@
             ?>
 
 
-  <div id='slidercentral2' class="row" >
+            <div id='slidercentral2' class="row" >
               <!-- se cargaran tantos divs como productos haya en la base de datos -->
-    <div class="container" style="margin-botom:40px;margin-top:30px;">
-        <center><h3>PEDIDOS BAR MERI</h3>
+              <div class="container" style="margin-botom:40px;margin-top:30px;">
+        <center><H3>TABLA DE PRODUCTOS</H3> </center>
+        <a href='../admin/anadir_admin_producto.php' style="margin-left:91.5%"><button type='button' class='btn btn-success'>Añadir</button></a>
+        <a href='../admin/admin_productos_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
         <div id="tabla" class="container">
-        <a href='../admin/admin_pedidos_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
-        <table   style="margin-top:20px;text-align:center"   class="table">
+        <table   style="margin-top:20px"  class="table">
             <tr class="active">
-              <th style="text-align:center" >Usuario</th>
-              <th style="text-align:center" >Fecha Pedido</th>
-              <th style="text-align:center" >Importe total</th>
-              <th style="text-align:center" >Detalles</th>
+              <th>IdProducto</th>
+              <th>Tipo producto</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Imagen</th>
+              <th>Operaciones</th>
+
             </tr>
         <?php
         include("../conexion.php");
@@ -183,7 +188,7 @@
         // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
 
         //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="SELECT * FROM pedidos,usuarios WHERE pedidos.Usuario_idusuario=usuarios.idusuario";
+        $consulta="SELECT * FROM `producto`";
 
         if ($result = $connection->query($consulta)) {
 
@@ -193,31 +198,35 @@
               } else {
                     while($fila=$result->fetch_object()){
                         echo "<tr>
-                                <td>$fila->Username</td>
-                                <td>$fila->Fecha_pedido</td>
-                                <td>$fila->Coste_total</td>
+                                <td>$fila->IdProducto</td>
+                                <td>$fila->Tipo_producto</td>
+                                <td>$fila->Nombre</td>
+                                <td>$fila->Precio</td>
+                                <td>$fila->Cantidad</td>
+                                <td><img src='../Imagenes_menu/".$fila->Imagen."' style='width:40px;height:40px' alt='' /></td>
                                 <td>
-                                  <a href='ver_detalles_pedido_admin.php?NPedido=$fila->Num_pedido'>Ver Detalles </a>
-                                  <a href='../admin/ver_detalles_pedidos_admin_pdf.php?NPedido=$fila->Num_pedido' style='margin-left:91.5%;float:right;'><button type='button' class='btn btn-danger'>Generar PDF</button></a>
-                                </td>
-
-
+                                  <a href='../admin/editar_admin_producto.php?IdProducto=".$fila->IdProducto."'><button type='button' class='btn btn-warning'>Editar</button></a>
+                                  <a href='../admin/admin_borrar_producto.php?IdProducto=".$fila->IdProducto."'><button type='button' class='btn btn-danger'>Borrar</button></a>
                               </tr>";
                     }
               }
-        }else{
-          echo $connection->error;
         }
 
+
+
+
+
+
         ?>
-      </table> </center>
-      </div>
+      </table>
     </div>
   </div>
+      </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
           </div>
 
+      </div>
     </body>
 </html>

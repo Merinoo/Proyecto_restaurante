@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <?php
   ob_start();
    session_start();
@@ -12,32 +13,36 @@
     header("Location: ../index.php");
   }
 ?>
+
 <html>
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="../css/menu.css" rel="stylesheet" type="text/css">
-      <link href="../Css/login.css" rel="stylesheet" type="text/css">
+    <link href="../css/login.css" rel="stylesheet" type="text/css">
 
-      <?php
-        if(isset($_SESSION["tipo"])){
-          if($_SESSION["tema"]==1){
-            echo '<link rel="stylesheet" href="../css/indexhtml.css">';
-          }elseif($_SESSION["tema"]==2){
-            echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
-          }elseif($_SESSION["tema"]==3){
-            echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
-          }
-        }else{
+    <?php
+      if(isset($_SESSION["tipo"])){
+        if($_SESSION["tema"]==1){
           echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+        }elseif($_SESSION["tema"]==2){
+          echo '<link rel="stylesheet" href="../css/indexhtml2.css">';
+        }elseif($_SESSION["tema"]==3){
+          echo '<link rel="stylesheet" href="../css/indexhtml3.css">';
         }
-      ?>
+      }else{
+        echo '<link rel="stylesheet" href="../css/indexhtml.css">';
+      }
+    ?>
+
+     <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -57,29 +62,30 @@
           <div id='menucabecera'>
 
               <div id="logo">
-
               </div>
 
               <div id="menu">
                 <ul>
                   <li><a href="../admin/indexadmin.php">Inicio</a></li>
-                  <li class="active"><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
                   <li><a href="../admin/admin_producto.php">Productos</a></li>
                   <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
-                  <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
+                  <li class="active"><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
 
 
-                    <ul style="float:right;list-style-type:none;">
+                    <ul style="float:right; list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
                       <?php if(empty($_SESSION["user"])) : ?>
+                          <li><a href="./registro.php">Registro</a></li>
                            <li><a href="#login">Login</a></li>
+
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                        <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
-                            <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
+                          <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
+                          <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -87,7 +93,7 @@
                       if(empty($_GET["logout"])){
                       }else{
                         session_destroy();
-                        header("Location: ../index.php");
+                        header("Location: ../admin/indexadmin.php");
                       }
                     ?>
 
@@ -96,7 +102,7 @@
                           <div>	<a href="#close" title="Close" class="close">X</a>
                                <h2><center>Login</center></h2>
                                <form method="post" action="./index.php">
-                                 <table class="table">
+                                 <table>
                                    <tr>
                                       <td><input type="text" id="user" name ="user" placeholder="Usuario"></td>
                                    </tr>
@@ -111,10 +117,11 @@
                                </form>
                           </div>
                       </div>
+
                     </ul>
                 </ul>
-              </div>
-            </div>
+              </div> <!-- Cierra <div id="menu"> -->
+            </div> <!-- Cierra <div id='menucabecera'> -->
 
             <?php
               //Recuperar los datos
@@ -163,66 +170,41 @@
             ?>
 
 
-  <div id='slidercentral2' class="row" >
-              <!-- se cargaran tantos divs como productos haya en la base de datos -->
-  <div class="container" style="margin-botom:40px;margin-top:30px;">
-        <center><H3>TABLA DE USUARIOS</H3> </center>
-        <a href='../admin/anadir_admin_usuario.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-success'>Añadir</button></a>
-        <a href='../admin/admin_usuarios_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
-        <div id="tabla" class="container">
-        <table   style="margin-top:20px"  class="table">
-            <tr class="active">
-              <th>Usuario</th>
-              <th>Email</th>
-              <th>Tipo</th>
-              <th>DNI</th>
-              <th>Nombre</th>
-              <th>Apellidos</th>
-              <th>Telefono</th>
-              <th>Operaciones</th>
-            </tr>
-        <?php
-        include("../conexion.php");
+      <div id='slidercentral' style="height:1500px;">
 
-        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
-        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
-
-        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
-        $consulta="select * from usuarios";
-
-        if ($result = $connection->query($consulta)) {
-
-              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
-              if ($result->num_rows==0) {
-                //echo "EL USUARIO NO EXISTE";
-              } else {
-                    while($fila=$result->fetch_object()){
-                        echo "<tr>
-                                <td>$fila->Username</td>
-                                <td>$fila->Email</td>
-                                <td>$fila->Tipo</td>
-                                <td>$fila->Dni_usuario</td>
-                                <td>$fila->Nombre</td>
-                                <td>$fila->Apellidos</td>
-                                <td>$fila->Telefono</td>
-                                <td>
-                                  <a href='../admin/editar_admin_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-warning'>Editar</button></a>
-                                  <a href='../admin/admin_borrar_usuarios.php?idusuario=".$fila->idusuario."'><button type='button' class='btn btn-danger'>Borrar</button></a>
-                            </tr>";
-                    }
-              }
-        }
+        <div style="width:100%:position:relative;">
+          <div class="row" style="width:90%;margin: 0 auto;">
+            <div id="cuerpo_prov">
+                <div id="cr_prov">
+                  <form class="form-horizontal" role="form" method="post">
+                      <fieldset>
+                        <legend><span class="glyphicon glyphicon-cutlery"></span> CANTIDAD PRODUCTOS POR TIPO</legend>
+                        <?php
+                          include("./estadisticas_tipo_producto.php");
+                         ?>
+                      </fieldset>
+                      <fieldset>
+                        <legend><span class="glyphicon glyphicon-cutlery"></span> PRODUCTOS MAS VENDIDOS</legend>
+                        <?php
+                          include("./estadisticas_productos_mas_vendidos.php");
+                         ?>
+                      </fieldset>
+                      <fieldset>
+                        <legend><span class="glyphicon glyphicon-cutlery"></span> ESTADISTICAS GENERALES</legend>
+                        <?php
+                          include("./estadisticas_generales.php");
+                         ?>
+                      </fieldset>
 
 
+                  </form>
+                </div>
+            </div>
+          </div>
 
 
-
-
-        ?>
-      </table>
-    </div>
-  </div>
       </div>
+    </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <?php
   ob_start();
    session_start();
@@ -13,11 +12,11 @@
     header("Location: ../index.php");
   }
 ?>
-
 <html>
   <head>
     <meta charset="UTF-8">
     <title></title>
+    <link href="../css/menu.css" rel="stylesheet" type="text/css">
     <link href="../css/login.css" rel="stylesheet" type="text/css">
 
     <?php
@@ -34,13 +33,10 @@
       }
     ?>
 
-     <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
-
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -60,30 +56,29 @@
           <div id='menucabecera'>
 
               <div id="logo">
+
               </div>
 
               <div id="menu">
                 <ul>
-                  <li class="active"><a href="../admin/indexadmin.php">Inicio</a></li>
+                  <li><a href="../admin/indexadmin.php">Inicio</a></li>
                   <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li><a href="../admin/admin_producto.php">Productos</a></li>
-                  <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li class="active"><a href="../admin/admin_pedidos.php">Pedidos</a></li>
                   <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
 
 
-                    <ul style="float:right; list-style-type:none;">
+                    <ul style="float:right;list-style-type:none;">
 
                   <!-- Aqui miramos si al darle al login esta logueado  o no -->
                   <!-- Si no esta logueado muestra el boton de login y mostrara luego el menú para loguearnos -->
                       <?php if(empty($_SESSION["user"])) : ?>
-                          <li><a href="./registro.php">Registro</a></li>
                            <li><a href="#login">Login</a></li>
-
                   <!-- Si esta logueado mostrara el menu del usuario que se logueo -->
                   <!-- Añadimos al boton el enlace con valor logout yes-->
                       <?php else : ?>
-                          <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
-                          <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
+                        <li><a href="./editar_admin_logeado.php"><?php echo $_SESSION["user"]; ?></a></li>
+                            <li><a href="../index.php?logout=yes"><img id="cerrar_sesion" src="../logo/logout.png" /></a></li>
                       <?php endif ?>
 
 
@@ -91,7 +86,7 @@
                       if(empty($_GET["logout"])){
                       }else{
                         session_destroy();
-                        header("Location: ../admin/indexadmin.php");
+                        header("Location: ../index.php");
                       }
                     ?>
 
@@ -100,7 +95,7 @@
                           <div>	<a href="#close" title="Close" class="close">X</a>
                                <h2><center>Login</center></h2>
                                <form method="post" action="./index.php">
-                                 <table>
+                                 <table class="table">
                                    <tr>
                                       <td><input type="text" id="user" name ="user" placeholder="Usuario"></td>
                                    </tr>
@@ -115,11 +110,10 @@
                                </form>
                           </div>
                       </div>
-
                     </ul>
                 </ul>
-              </div> <!-- Cierra <div id="menu"> -->
-            </div> <!-- Cierra <div id='menucabecera'> -->
+              </div>
+            </div>
 
             <?php
               //Recuperar los datos
@@ -168,22 +162,61 @@
             ?>
 
 
-      <div id='slidercentral'>
+  <div id='slidercentral2' class="row" >
+              <!-- se cargaran tantos divs como productos haya en la base de datos -->
+    <div class="container" style="margin-botom:40px;margin-top:30px;">
+        <center><h3>PEDIDOS BAR MERI</h3>
+        <div id="tabla" class="container">
+        <a href='../admin/admin_pedidos_pdf.php' style="margin-left:91.5%;float:right;"><button type='button' class='btn btn-danger'>Generar PDF</button></a>
+        <table   style="margin-top:20px;text-align:center"   class="table">
+            <tr class="active">
+              <th style="text-align:center" >Usuario</th>
+              <th style="text-align:center" >Fecha Pedido</th>
+              <th style="text-align:center" >Importe total</th>
+              <th style="text-align:center" >Detalles</th>
+            </tr>
+        <?php
+        include("../conexion.php");
 
-        <div style="width:100%:position:relative;">
-          <center>
-          ZONA DE ADMINISTRACION DE LA WEB
-          <img src="../admin/area_administrativa.jpg"></img>
-          </center>
+        //INSERT INTO `usuarios`(`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `C.postal`, `Telefono`, `Sexo`, `F.Nacimiento`, `Direccion`)
+        // VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14])
+
+        //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
+        $consulta="SELECT * FROM pedidos,usuarios WHERE pedidos.Usuario_idusuario=usuarios.idusuario";
+
+        if ($result = $connection->query($consulta)) {
+
+              //Si te devuelve 0 es que el usuario no esta en la base de datos.Sino si existe y mira en else
+              if ($result->num_rows==0) {
+                //echo "EL USUARIO NO EXISTE";
+              } else {
+                    while($fila=$result->fetch_object()){
+                        echo "<tr>
+                                <td>$fila->Username</td>
+                                <td>$fila->Fecha_pedido</td>
+                                <td>$fila->Coste_total</td>
+                                <td>
+                                  <a href='ver_detalles_pedido_admin.php?NPedido=$fila->Num_pedido'>Ver Detalles </a>
+                                  <a href='../admin/ver_detalles_pedidos_admin_pdf.php?NPedido=$fila->Num_pedido' style='margin-left:91.5%;float:right;'><button type='button' class='btn btn-danger'>Generar PDF</button></a>
+                                </td>
 
 
+                              </tr>";
+                    }
+              }
+        }else{
+          echo $connection->error;
+        }
+
+        ?>
+      </table> </center>
       </div>
     </div>
+  </div>
 
           <div id='pie'>
             © 2015 BAR MERI España. Todos los derechos reservados.
           </div>
 
-      </div>
     </body>
 </html>

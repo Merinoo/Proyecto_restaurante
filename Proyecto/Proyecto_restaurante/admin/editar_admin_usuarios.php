@@ -16,7 +16,6 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-
       <link href="../css/login.css" rel="stylesheet" type="text/css">
 
       <?php
@@ -34,10 +33,9 @@
       ?>
 
     <!-- Estas son las librerias de ajax y bootstrap online que necesito para el slidercentral -->
-
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
     <style>
     .carousel-inner > .item > img,
@@ -62,9 +60,9 @@
 
               <div id="menu">
                 <ul>
-                  <li><a class="active" href="../admin/indexadmin.php">Inicio</a></li>
-                  <li><a href="../admin/admin_usuarios.php">Usuarios</a></li>
-                  <li class="active"><a href="../admin/admin_usuarios.php">Productos</a></li>
+                  <li><a  href="../admin/indexadmin.php">Inicio</a></li>
+                  <li class="active"><a href="../admin/admin_usuarios.php">Usuarios</a></li>
+                  <li><a href="../admin/admin_usuarios.php">Productos</a></li>
                   <li><a href="../admin/admin_pedidos.php">Pedidos</a></li>
                   <li><a href="../admin/admin_estadisticas.php">Estadisticas</a></li>
 
@@ -128,6 +126,7 @@
                     //Conexion con la base de datos
                     include("../conexion.php");
 
+
                     //Aqui ponemos $user y $pass porque recogemos las variables arriba por eso no usamos $_POST.
                     $consulta="select * from usuarios where Username='".$user."' and Password=md5('".$pass."');";
 
@@ -144,12 +143,12 @@
         <?php
 
         include("../conexion.php");
-          $valor=$_GET ["IdProducto"];
-          $consulta="select * FROM producto where IdProducto=$valor";
+          $valor=$_GET ["idusuario"];
+          $consulta="select * FROM usuarios where idusuario=$valor";
           $result=$connection->query($consulta);
           $fila=$result->fetch_object();
 
-//SELECT `IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `imagen` FROM `producto` WHERE 1
+
     echo'<table border=0>
 
           <h2>Datos personales</h2>
@@ -157,9 +156,9 @@
           <table border=0>
 
             <tr>
-              <td>Tipo Producto:</td>
-              <td><input type="text" name="Tipo_producto" maxlength="40" size="70" placeholder="comida" value="'.$fila->Tipo_producto.'" required>
-              <input type="hidden" name="idproducto" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
+              <td>DNI:</td>
+              <td><input type="text" name="Dni_usuario" maxlength="9" size="18" placeholder="53344470H" value="'.$fila->Dni_usuario.'" required>
+              <input type="hidden" name="idusu" maxlength="9" size="18" placeholder="53344470H" value="'.$valor.'" required></td><br>
             </tr>
 
             <tr>
@@ -168,13 +167,43 @@
             </tr>
 
             <tr>
-              <td>Precio:</td>
-              <td><input type="number" name="Precio" step="any" min="0" placeholder="1.00€" value="'.$fila->Precio.'" required></td>
+              <td>Apellidos:</td>
+              <td><input type="text" name="Apellidos" maxlength="25" size="18" placeholder="Merino Soto" value="'.$fila->Apellidos.'" required></td>
             </tr>
 
             <tr>
-              <td>Cantidad:</td>
-              <td><input type="number" name="Cantidad" step="any" min="0"  value="'.$fila->Cantidad.'" required></td>
+              <td>Direccion:</td>
+              <td><input type="text" name="Direccion" maxlength="25" size="18"  placeholder="C/Argantonio Nº6" value="'.$fila->Direccion.'" required></td>
+            </tr>
+
+            <tr>
+              <td>Teléfono:</td>
+              <td><input type="text" name="Telefono" maxlength="9" size="18" placeholder="679210535" value="'.$fila->Telefono.'" required></td><br>
+            </tr>
+
+            <tr>
+              <td>C.Postal:</td>
+              <td><input type="text" name="CPostal" maxlength="5" size="18" placeholder="41900" value="'.$fila->Cpostal.'" required></td>
+            </tr>
+
+            <tr>
+              <td>Sexo:</td>';
+              if($fila->Sexo=='Hombre'){
+              echo    '<td><input type="radio" name="Sexo" value="Hombre" checked>Hombre<Input type="radio" name="Sexo" value="Mujer">Mujer </td>';
+              }else{
+              echo    '<td><input type="radio" name="Sexo" value="Hombre">Hombre<Input type="radio" name="Sexo" value="Mujer" checked>Mujer </td>';
+              }
+              echo '
+            </tr>
+
+            <tr>
+              <td>F.Nacimiento:</td>
+              <td><input type="date" name="FNacimiento" size="18" placeholder="1990-12-27" value="'.$fila->FNacimiento.'" /></td>
+            </tr>
+
+            <tr>
+              <td>Email:</td>
+              <td><input type="text" name="Email" maxlength="35" size="18" placeholder="amerino96@gmail.com"  value="'.$fila->Email.'" required></td>
             </tr>
 
             <tr>
@@ -190,24 +219,29 @@
           if(isset($_POST["Nombre"])){
 
 
-          $tipo=$_POST["Tipo_producto"];
+          $DNI=$_POST["Dni_usuario"];
           $Nombre=$_POST["Nombre"];
-          $precio=$_POST["Precio"];
-          $Cantidad=$_POST["Cantidad"];
-          $idproducto=$_POST["idproducto"];
+          $Apellidos=$_POST["Apellidos"];
+          $Direccion=$_POST["Direccion"];
+          $Telefono=$_POST["Telefono"];
+          $CPostal=$_POST["CPostal"];
+          $Sexo=$_POST["Sexo"];
+          $FNacimiento=$_POST["FNacimiento"];
+          $Email=$_POST["Email"];
+          $idusu=$_POST["idusu"];
           //UPDATE usuarios SET Password=md5('$Password'),Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos="$Apellidos",Cpostal=$CPostal,Telefono=$Telefono,Sexo=$Sexo,FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE Idusuario=$idusu
           //var_dump($Usuario,$Password,$DNI,$Nombre,$Apellidos,$Direccion,$Telefono,$CPostal,$Sexo,$FNacimiento,$Email);
 
           //Conexion con la base de datos
           include("../conexion.php");
 
-          $consulta="UPDATE producto SET Tipo_producto='$tipo',Precio='$precio',Nombre='$Nombre',Cantidad='$Cantidad' WHERE IdProducto=$idproducto";
+          $consulta="UPDATE usuarios SET Email='$Email',Dni_usuario='$DNI',Nombre='$Nombre',Apellidos='$Apellidos',Cpostal=$CPostal,Telefono=$Telefono,Sexo='$Sexo',FNacimiento='$FNacimiento',Direccion='$Direccion' WHERE idusuario=$idusu";
           if($result=$connection->query($consulta)){
             //header("Location: admin_usuarios.php");
 
             //echo $consulta;
             echo '<p><b>Consulta actualizada</b></p>';
-            header("Location: ../admin/admin_producto.php");
+            header("Location: ../admin/admin_usuarios.php");
 
 
           }else{
