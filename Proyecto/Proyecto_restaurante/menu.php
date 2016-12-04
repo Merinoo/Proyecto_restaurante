@@ -18,8 +18,8 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="./Css/menu.css" rel="stylesheet" type="text/css">
-    <link href="./Css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
+    <link href="./css/menu.css" rel="stylesheet" type="text/css">
+    <link href="./css/login.css" rel="stylesheet" type="text/css"> <!-- Tenemos que poner el css del login sino el cuadro no aparecera -->
 
     <?php
       if(isset($_SESSION["tipo"])){
@@ -34,7 +34,7 @@
         echo '<link rel="stylesheet" href="./css/indexhtml.css">';
       }
     ?>
-    
+
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>

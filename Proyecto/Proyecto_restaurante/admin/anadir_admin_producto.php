@@ -17,7 +17,7 @@
     <meta charset="UTF-8">
     <title></title>
 
-      <link href="../Css/login.css" rel="stylesheet" type="text/css">
+      <link href="../css/login.css" rel="stylesheet" type="text/css">
 
       <?php
         if(isset($_SESSION["tipo"])){
