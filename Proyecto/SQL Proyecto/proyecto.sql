@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.12
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.6.245.130:3306
--- Tiempo de generación: 08-04-2016 a las 11:30:12
--- Versión del servidor: 5.5.45
--- Versión de PHP: 5.3.3
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 04-12-2016 a las 17:57:07
+-- Versión del servidor: 10.1.16-MariaDB
+-- Versión de PHP: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `proyecto`
@@ -26,12 +26,10 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `cesta`
 --
 
-CREATE TABLE IF NOT EXISTS `cesta` (
+CREATE TABLE `cesta` (
   `Usuarios_idusuario` int(11) NOT NULL,
   `Producto_IdProducto` int(11) NOT NULL,
-  `Cantidad` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Usuarios_idusuario`,`Producto_IdProducto`),
-  KEY `fk_Cesta_Producto1_idx` (`Producto_IdProducto`)
+  `Cantidad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -48,15 +46,12 @@ INSERT INTO `cesta` (`Usuarios_idusuario`, `Producto_IdProducto`, `Cantidad`) VA
 -- Estructura de tabla para la tabla `detalle_pedido`
 --
 
-CREATE TABLE IF NOT EXISTS `detalle_pedido` (
+CREATE TABLE `detalle_pedido` (
   `Cantidad` int(11) DEFAULT NULL,
-  `codlinea` int(11) NOT NULL AUTO_INCREMENT,
+  `codlinea` int(11) NOT NULL,
   `Pedidos_Num_pedido` int(11) NOT NULL,
-  `Producto_IdProducto` int(11) NOT NULL,
-  PRIMARY KEY (`codlinea`,`Pedidos_Num_pedido`,`Producto_IdProducto`),
-  KEY `fk_Detalle pedido_Producto1_idx` (`Producto_IdProducto`),
-  KEY `fk_Detalle pedido_Pedidos1` (`Pedidos_Num_pedido`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+  `Producto_IdProducto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `detalle_pedido`
@@ -78,14 +73,12 @@ INSERT INTO `detalle_pedido` (`Cantidad`, `codlinea`, `Pedidos_Num_pedido`, `Pro
 -- Estructura de tabla para la tabla `pedidos`
 --
 
-CREATE TABLE IF NOT EXISTS `pedidos` (
-  `Num_pedido` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `pedidos` (
+  `Num_pedido` int(11) NOT NULL,
   `Usuario_idusuario` int(11) NOT NULL,
   `Fecha_pedido` date DEFAULT NULL,
-  `Coste_total` decimal(9,2) DEFAULT NULL,
-  PRIMARY KEY (`Num_pedido`,`Usuario_idusuario`),
-  KEY `fk_Pedidos_Usuario_idx` (`Usuario_idusuario`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+  `Coste_total` decimal(9,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `pedidos`
@@ -105,15 +98,14 @@ INSERT INTO `pedidos` (`Num_pedido`, `Usuario_idusuario`, `Fecha_pedido`, `Coste
 -- Estructura de tabla para la tabla `producto`
 --
 
-CREATE TABLE IF NOT EXISTS `producto` (
-  `IdProducto` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `producto` (
+  `IdProducto` int(11) NOT NULL,
   `Tipo_producto` varchar(45) DEFAULT NULL,
   `Nombre` varchar(45) DEFAULT NULL,
   `Precio` decimal(6,2) DEFAULT NULL,
   `Cantidad` int(11) DEFAULT NULL,
-  `Imagen` varchar(300) NOT NULL,
-  PRIMARY KEY (`IdProducto`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
+  `Imagen` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `producto`
@@ -122,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `producto` (
 INSERT INTO `producto` (`IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cantidad`, `Imagen`) VALUES
 (33, 'Bebidas', 'Coca Cola', '1.00', 100, 'cocacola.jpg'),
 (34, 'Bebidas', 'Fanta Naranja', '1.00', 100, 'fanta.jpg'),
-(35, 'Bebidas', 'Aquarius Limón', '1.00', 100, 'aquarius.jpg'),
+(35, 'Bebidas', 'Aquarius LimÃ³n', '1.00', 100, 'aquarius.jpg'),
 (36, 'Bebidas', 'Nestea', '1.20', 100, 'nestea.jpg'),
 (37, 'Bebidas', 'Pepsi', '1.00', 100, 'pepsi.jpg'),
 (38, 'Comida', 'Hamburguesa', '3.50', 104, 'Hamburguesa.jpg'),
@@ -142,8 +134,8 @@ INSERT INTO `producto` (`IdProducto`, `Tipo_producto`, `Nombre`, `Precio`, `Cant
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `idusuario` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `usuarios` (
+  `idusuario` int(11) NOT NULL,
   `Username` varchar(45) DEFAULT NULL,
   `Password` varchar(45) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
@@ -157,31 +149,86 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `Sexo` varchar(6) DEFAULT NULL,
   `FNacimiento` date DEFAULT NULL,
   `Direccion` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idusuario`),
-  UNIQUE KEY `Dni_usuario_UNIQUE` (`Dni_usuario`),
-  UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+  `Tema` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `Cpostal`, `Telefono`, `Sexo`, `FNacimiento`, `Direccion`) VALUES
-(7, 'japon', '81dc9bdb52d04dc20036dbd8313ed055', 'japon@email.com', 'Activo', 'user', '78945621L', 'Juan Antonio', 'Japon', 41900, 987654321, 'Hombre', '0000-00-00', 'C/japon'),
-(8, 'juandiuser', '81dc9bdb52d04dc20036dbd8313ed055', 'pekechis@gmail.com', 'Activo', 'user', '11888459A', 'Juan Diego', 'Perez', 41914, 654358742, 'Hombre', '0000-00-00', 'C/Triana'),
-(9, 'juandiadmin', '81dc9bdb52d04dc20036dbd8313ed055', 'pekechis@gmail.com', 'Activo', 'admin', '7867687D', 'Juan Diego', 'Perez', 41914, 987654321, 'Hombre', '0000-00-00', 'C/Triana'),
-(11, 'peke1', '0e8623fe6fa3bb3440825081c8c2ad05', 'pekechis@gmail.com', 'Activo', 'user', 'sdfsdafsa', 'sdafsadf', 'sdfsad', 34534, 444444444, 'Mujer', '0000-00-00', 'sadfas');
+INSERT INTO `usuarios` (`idusuario`, `Username`, `Password`, `Email`, `Actividad`, `Tipo`, `Dni_usuario`, `Nombre`, `Apellidos`, `Cpostal`, `Telefono`, `Sexo`, `FNacimiento`, `Direccion`, `Tema`) VALUES
+(7, 'japon', '81dc9bdb52d04dc20036dbd8313ed055', 'japon@email.com', 'Activo', 'user', '78945621L', 'Juan Antonio', 'Japon', 41900, 987654321, 'Hombre', '0000-00-00', 'C/japon', 1),
+(8, 'juandiuser', '81dc9bdb52d04dc20036dbd8313ed055', 'pekechis@gmail.com', 'Activo', 'user', '11888459A', 'Juan Diego', 'Perez', 41914, 654358742, 'Hombre', '0000-00-00', 'C/Triana', 1),
+(9, 'juandiadmin', '81dc9bdb52d04dc20036dbd8313ed055', 'pekechis@gmail.com', 'Activo', 'admin', '7867687D', 'Juan Diego', 'Perez', 41914, 987654321, 'Hombre', '0000-00-00', 'C/Triana', 3),
+(11, 'peke1', '0e8623fe6fa3bb3440825081c8c2ad05', 'pekechis@gmail.com', 'Activo', 'user', 'sdfsdafsa', 'sdafsadf', 'sdfsad', 34534, 444444444, 'Mujer', '0000-00-00', 'sadfas', 2);
 
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `cesta`
+--
+ALTER TABLE `cesta`
+  ADD PRIMARY KEY (`Usuarios_idusuario`,`Producto_IdProducto`),
+  ADD KEY `fk_Cesta_Producto1_idx` (`Producto_IdProducto`);
+
+--
+-- Indices de la tabla `detalle_pedido`
+--
+ALTER TABLE `detalle_pedido`
+  ADD PRIMARY KEY (`codlinea`,`Pedidos_Num_pedido`,`Producto_IdProducto`),
+  ADD KEY `fk_Detalle pedido_Producto1_idx` (`Producto_IdProducto`),
+  ADD KEY `fk_Detalle pedido_Pedidos1` (`Pedidos_Num_pedido`);
+
+--
+-- Indices de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`Num_pedido`,`Usuario_idusuario`),
+  ADD KEY `fk_Pedidos_Usuario_idx` (`Usuario_idusuario`);
+
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`IdProducto`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`idusuario`),
+  ADD UNIQUE KEY `Dni_usuario_UNIQUE` (`Dni_usuario`),
+  ADD UNIQUE KEY `Username_UNIQUE` (`Username`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `detalle_pedido`
+--
+ALTER TABLE `detalle_pedido`
+  MODIFY `codlinea` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  MODIFY `Num_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `IdProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `cesta`
---
-ALTER TABLE `cesta`
-  ADD CONSTRAINT `fk_Cesta_Producto1` FOREIGN KEY (`Producto_IdProducto`) REFERENCES `producto` (`IdProducto`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Cesta_Usuarios1` FOREIGN KEY (`Usuarios_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `detalle_pedido`
@@ -189,12 +236,6 @@ ALTER TABLE `cesta`
 ALTER TABLE `detalle_pedido`
   ADD CONSTRAINT `fk_Detalle pedido_Pedidos1` FOREIGN KEY (`Pedidos_Num_pedido`) REFERENCES `pedidos` (`Num_pedido`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Detalle pedido_Producto1` FOREIGN KEY (`Producto_IdProducto`) REFERENCES `producto` (`IdProducto`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  ADD CONSTRAINT `fk_Pedidos_Usuario` FOREIGN KEY (`Usuario_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
